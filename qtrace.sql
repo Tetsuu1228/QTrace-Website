@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 09, 2026 at 08:29 AM
+-- Generation Time: Jan 11, 2026 at 01:54 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -160,12 +160,12 @@ CREATE TABLE `report_table` (
 
 CREATE TABLE `user_table` (
   `user_ID` int(11) NOT NULL,
-  `QC_ID_Number` int(11) NOT NULL,
+  `QC_ID_Number` varchar(20) DEFAULT NULL,
   `user_lastName` varchar(50) NOT NULL,
   `user_firstName` varchar(50) NOT NULL,
   `user_middleName` varchar(20) DEFAULT NULL,
   `user_Email` varchar(20) NOT NULL,
-  `user_Password` varchar(20) NOT NULL,
+  `user_Password` varchar(255) NOT NULL,
   `user_Role` enum('citizen','admin') NOT NULL,
   `user_birthDate` date NOT NULL,
   `user_sex` enum('female','male','other') NOT NULL,
@@ -179,8 +179,8 @@ CREATE TABLE `user_table` (
 --
 
 INSERT INTO `user_table` (`user_ID`, `QC_ID_Number`, `user_lastName`, `user_firstName`, `user_middleName`, `user_Email`, `user_Password`, `user_Role`, `user_birthDate`, `user_sex`, `user_contactInformation`, `user_address`, `created_At`) VALUES
-(1, 0, 'Manongdo', 'Gerald', 'Pavillon', 'ipoglang@gmail.com', '$2y$10$hr0Tc0IEObKIR', 'admin', '2005-09-12', 'male', 9082938218, 'blk 51 lt 49 noche buena st. ', '2026-01-09'),
-(2, 2147483647, 'Clifford', 'Kurt', 'Eyong', 'TEst1@gmail.com', '$2y$10$xYxJX5HeB.Bm3', 'citizen', '2007-09-12', 'other', 12312312, 'blk 51 lt 49 noche buena st. ', '2026-01-09');
+(6, '74373497704', 'Manongdo', 'Gerald', 'P.', 'ipoglang@gmail.com', '$2y$10$ABJV3LTejJGIWKXjcUeS2eUr5/C6P0GzzkCkHWT15Vgyc7y7ThXJe', 'admin', '2005-09-12', 'male', 3123123214, 'blk 51 lt 49 noche buena st. ', '2026-01-11'),
+(7, '97192855754', 'Tan', 'Kurt', 'Clet', 'KurtTan@gmail.com', '$2y$10$5x4VPncdSUs9Wg81LIVcbOlcXAsnik7C7ESH5OiSbyyr1UREM56EG', 'citizen', '2006-03-10', 'female', 43243432, '123', '2026-01-11');
 
 --
 -- Indexes for dumped tables
@@ -267,7 +267,7 @@ ALTER TABLE `report_table`
 -- AUTO_INCREMENT for table `user_table`
 --
 ALTER TABLE `user_table`
-  MODIFY `user_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `user_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Constraints for dumped tables
