@@ -163,6 +163,16 @@ CREATE TABLE `project_status` (
   `status_name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `project_status`
+--
+
+INSERT INTO `project_status` (`status_id`, `status_name`) VALUES
+  (1, 'Planned'),
+  (2, 'Ongoing'),
+  (3, 'Delayed'),
+  (4, 'Completed');
+
 -- --------------------------------------------------------
 
 --
@@ -398,7 +408,6 @@ ALTER TABLE `contractor_documents_table`
 -- Constraints for table `contractor_expertise_table`
 --
 ALTER TABLE `contractor_expertise_table`
-  ADD CONSTRAINT `fk_document_contractor` FOREIGN KEY (`Contractor_Id`) REFERENCES `contractor_table` (`Contractor_Id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_expertise_contractor` FOREIGN KEY (`Contractor_Id`) REFERENCES `contractor_table` (`Contractor_Id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
@@ -419,8 +428,8 @@ ALTER TABLE `projectsdocument_table`
 --
 ALTER TABLE `projects_table`
   ADD CONSTRAINT `fk_projects_contractor` FOREIGN KEY (`Contractor_ID`) REFERENCES `contractor_table` (`Contractor_Id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `projects_table_ibfk_2` FOREIGN KEY (`status_id`) REFERENCES `project_status` (`status_id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `projects_table_ibfk_3` FOREIGN KEY (`location_ID`) REFERENCES `locations_table` (`location_id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_projects_status` FOREIGN KEY (`status_id`) REFERENCES `project_status` (`status_id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_projects_location` FOREIGN KEY (`location_ID`) REFERENCES `locations_table` (`location_id`) ON UPDATE CASCADE;
 
 --
 -- Constraints for table `report_table`
