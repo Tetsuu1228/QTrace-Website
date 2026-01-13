@@ -1,3 +1,9 @@
+<?php 
+    $current_page = 'map'; 
+    require('../../database/controllers/get_projectMap.php');
+
+?>
+
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
   <head>
@@ -16,242 +22,157 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
     <!-- General Css Link -->
     <link rel="stylesheet" href="/QTrace-Website/assets/css/styles.css" />
+    <!-- Map Link -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <!-- Custome Css For This Page Only  -->
     <style>
-            * {
-        box-sizing: border-box;
+        /* Map Legend Overlay */
+        .map-legend { 
+            position: absolute; 
+            top: 20px; 
+            right: 20px; 
+            z-index: 1000; 
+            background: white; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 12px; 
+            min-width: 140px;
+        }
+        .legend-item { 
+            display: flex; 
+            align-items: center; 
+            font-size: 0.8rem; 
+            margin-bottom: 5px; 
+        }
+        .dot { 
+            height: 10px; 
+            width: 10px; 
+            border-radius: 50%; 
+            display: inline-block; 
+            margin-right: 10px; 
+        }
+        
+        /*  Map  */
+        #map { 
+            height: 100%; 
+            width: 100%; 
+            border-radius: 12px; 
+            z-index: 1; 
+        }
+        .col-md-8 { 
+            position: relative; 
         }
 
-        body {
-        margin: 0;
-        font-family: Arial, Helvetica, sans-serif;
-        background: #f3f4f6;
-        color: #111827;
+        /* Custom Pin Styling  */
+        .custom-pin { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+        }
+        .custom-pin i { 
+            font-size: 2.2rem; 
+            filter: drop-shadow(0px 3px 2px rgba(0,0,0,0.3)); 
         }
 
-        /* HEADER */
-        .page-header {
-        padding: 24px 32px;
-        background: white;
+        .project-list-area { 
+            max-height: 400px; 
+            overflow-y: auto; 
         }
-
-        .page-header h1 {
-        margin: 0 0 6px;
-        font-size: 26px;
+        .project-item { 
+            cursor: pointer; 
+            padding: 10px; 
+            border-bottom: 1px solid #eee; 
+            transition: 0.2s; 
         }
-
-        .page-header p {
-        margin: 0;
-        color: #6b7280;
-        font-size: 14px;
+        .project-item:hover { 
+            background: #f8f9fa; 
         }
-
-        /* MAIN LAYOUT */
-        .content {
-        display: flex;
-        gap: 24px;
-        padding: 24px 32px;
-        height: calc(100vh - 120px);
-        }
-
-        /* SIDEBAR */
-        .sidebar {
-        width: 360px;
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-        }
-
-        /* CARDS */
-        .card {
-        background: white;
-        padding: 16px;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-        }
-
-        .card h2 {
-        margin: 0 0 12px;
-        font-size: 16px;
-        }
-
-        /* FILTERS */
-        label {
-        display: block;
-        margin-top: 10px;
-        font-size: 13px;
-        }
-
-        select,
-        button {
-        width: 100%;
-        padding: 8px;
-        margin-top: 6px;
-        font-size: 14px;
-        }
-
-        button {
-        margin-top: 14px;
-        background: #e5e7eb;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        }
-
-        /* PROJECT LIST */
-        .project-list {
-        flex: 1;
-        overflow-y: auto;
-        }
-
-        .project-card {
-        border: 1px solid #e5e7eb;
-        border-radius: 8px;
-        padding: 12px;
-        margin-bottom: 10px;
-        cursor: pointer;
-        }
-
-        .project-card.active {
-        background: #eef2ff;
-        }
-
-        .project-card small {
-        color: #6b7280;
-        }
-
-        /* STATUS TAG */
-        .status {
-        float: right;
-        font-size: 12px;
-        padding: 2px 8px;
-        border-radius: 999px;
-        }
-
-        .status.Ongoing { background: #dcfce7; color: #166534; }
-        .status.Delayed { background: #fee2e2; color: #991b1b; }
-        .status.Planned { background: #dbeafe; color: #1e40af; }
-        .status.Completed { background: #e5e7eb; color: #374151; }
-
-        /* MAP */
-        .map-wrapper {
-        flex: 1;
-        position: relative;
-        }
-
-        #map {
-        height: 100%;
-        width: 100%;
-        border-radius: 16px;
-        }
-
-        /* LEGEND */
-        .legend {
-        position: absolute;
-        top: 16px;
-        right: 16px;
-        background: white;
-        padding: 10px;
-        border-radius: 10px;
-        font-size: 13px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        display: inline-block;
-        margin-right: 6px;
-        }
-
-        .planned { background: #2563eb; }
-        .ongoing { background: #16a34a; }
-        .delayed { background: #dc2626; }
-        .completed { background: #6b7280; }
     </style>
 
     <body>
         <?php
             include('../../components/topNavigation.php');
         ?>
-        <main>
-            <!-- HEADER -->
-            <section class="page-header">
-                <h1>Interactive Project Map</h1>
-                <p>
-                Explore all government projects across Quezon City.
-                Click on any project to view details.
-                </p>
-            </section>
+<main>
+        <section class="container py-5">
+            <div class="title-section mb-4">
+                <h2 class="fw-bold">Interactive Project Map</h2>
+                <p class="text-muted">Explore all government projects across Quezon City. Click on any project to view details.</p>
+            </div>
+            
+            <div class="row gap-4 gap-md-0">
+                <div class="col-md-4">
+                    <div class="card shadow-sm mb-3">
+                        <div class="card-body">
+                            <div class="filter-section">
+                                <h6 class="fw-bold mb-3 text-secondary small">SEARCH FILTERS</h6>
+                                <div class="row g-2">
+                                    <div class="col-12 mb-2">
+                                        <select id="statusFilter" class="form-select form-select-sm shadow-none">
+                                            <option value="all">All Statuses</option>
+                                            <option value="Planned">Planned</option>
+                                            <option value="Ongoing">Ongoing</option>
+                                            <option value="Delayed">Delayed</option>
+                                            <option value="Completed">Completed</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <select id="categoryFilter" class="form-select form-select-sm shadow-none">
+                                            <option value="all">All Categories</option>
+                                            <option value="Road">Roads</option>
+                                            <option value="School">Education</option>
+                                            <option value="Health">Healthcare</option>
+                                            <option value="Drainage">Drainage</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <button id="clearFilters" class="btn btn-light btn-sm w-100 border fw-bold text-muted">Clear All</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-            <!-- MAIN -->
-            <div class="content">
-
-                <!-- LEFT PANEL -->
-                <aside class="sidebar">
-
-                <!-- FILTERS -->
-                <div class="card">
-                    <h2>Filters</h2>
-
-                    <label>Status</label>
-                    <select id="statusFilter">
-                    <option value="all">All Statuses</option>
-                    <option value="Planned">Planned</option>
-                    <option value="Ongoing">Ongoing</option>
-                    <option value="Delayed">Delayed</option>
-                    <option value="Completed">Completed</option>
-                    </select>
-
-                    <label>Category</label>
-                    <select id="categoryFilter">
-                    <option value="all">All Categories</option>
-                    <option value="Infrastructure">Infrastructure</option>
-                    <option value="Healthcare">Healthcare</option>
-                    <option value="Education">Education</option>
-                    </select>
-
-                    <button id="clearFilters">Clear Filters</button>
+                    <div class="bg-light px-3 py-2 border rounded-top d-flex justify-content-between align-items-center">
+                        <span class="small fw-bold text-uppercase text-secondary">Projects Found</span>
+                        <span id="projectCount" class="badge bg-primary rounded-pill">0</span>
+                    </div>
+                    <div id="projectList" class="project-list-area border border-top-0 rounded-bottom bg-white">
+                        </div>
                 </div>
 
-                <!-- PROJECT LIST -->
-                <div class="card project-list">
-                    <h2>Projects (<span id="projectCount"></span>)</h2>
-                    <div id="projects"></div>
+                <div class="col-md-8">
+                    <div id="map" class="shadow-sm"></div>
+                    <div class="map-legend">
+                        <h6 class="fw-bold small border-bottom pb-2 mb-2">Status Key</h6>
+                        <div class="legend-item"><span class="dot bg-primary"></span> Planned</div>
+                        <div class="legend-item"><span class="dot bg-success"></span> Ongoing</div>
+                        <div class="legend-item"><span class="dot bg-danger"></span> Delayed</div>
+                        <div class="legend-item"><span class="dot bg-secondary"></span> Completed</div>
+                    </div>
                 </div>
+            </div>
+        </section>
+    </main>
 
-                </aside>
-
-                <!-- MAP -->
-                <main class="map-wrapper">
-                <div id="map"></div>
-
-                <!-- LEGEND -->
-                <div class="legend">
-                    <strong>Status Legend</strong>
-                    <div><span class="dot planned"></span> Planned</div>
-                    <div><span class="dot ongoing"></span> Ongoing</div>
-                    <div><span class="dot delayed"></span> Delayed</div>
-                    <div><span class="dot completed"></span> Completed</div>
-                </div>
-        </main>
-</div>
         
         <?php
             include('../../components/footer.php');
         ?>
 
-        <!-- Map JS -->
-         <script src="/QTrace-Website/assets/js/map.js"></script>
+        <!-- Custome Script For This Page Only  -->     
+        <script>
+            const projects = <?php echo json_encode($projects); ?>;
+        </script>
 
-        <!-- MapAPI -->
-        <script
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhA_ByIJUv0-alQhScOplTchhamHNpN4I&callback=initMap"
-            async
-            defer
-    ></script>
+        <!-- Map Link -->
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+        <!-- Reusable Script -->
+        <script src="/QTrace-Website/assets/js/map.js"></script>
+
         <!-- Bootstrap JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+        
     </body>
 </html>

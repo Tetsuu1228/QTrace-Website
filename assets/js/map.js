@@ -1,198 +1,110 @@
-let map;
-let markers = [];
-let infoWindow;
-
-/* Quezon City center */
-const QC_CENTER = { lat: 14.6760, lng: 121.0437 };
-
-/* Quezon City boundaries */
-const QC_BOUNDS = {
-  north: 14.760,
-  south: 14.620,
-  west: 120.980,
-  east: 121.120
-};
-
-/* Sample Project Data */
-const PROJECTS = [
-  {
-    id: 1,
-    name: "Batasan Hills Drainage System",
-    area: "Batasan Hills, District 2",
-    budget: "₱15.0M",
-    status: "Ongoing",
-    category: "Infrastructure",
-    position: { lat: 14.682, lng: 121.091 }
-  },
-  {
-    id: 2,
-    name: "Commonwealth Avenue Road Widening",
-    area: "District 6",
-    budget: "₱45.0M",
-    status: "Delayed",
-    category: "Infrastructure",
-    position: { lat: 14.676, lng: 121.060 }
-  },
-  {
-    id: 3,
-    name: "Tandang Sora Health Center Upgrade",
-    area: "District 5",
-    budget: "₱8.0M",
-    status: "Ongoing",
-    category: "Healthcare",
-    position: { lat: 14.671, lng: 121.031 }
-  },
-  {
-    id: 4,
-    name: "Novaliches Elementary School Building",
-    area: "District 4",
-    budget: "₱25.0M",
-    status: "Completed",
-    category: "Education",
-    position: { lat: 14.735, lng: 121.038 }
-  }
-];
-
-/* Google Maps callback */
-window.initMap = function () {
-  const bounds = new google.maps.LatLngBounds(
-    { lat: QC_BOUNDS.south, lng: QC_BOUNDS.west },
-    { lat: QC_BOUNDS.north, lng: QC_BOUNDS.east }
-  );
-
-  map = new google.maps.Map(document.getElementById("map"), {
-    center: QC_CENTER,
+// Initialize the Map
+const map = L.map('map', {
+    center: [14.6760, 121.0437], // Quezon City Coordinates
     zoom: 13,
-    restriction: {
-      latLngBounds: bounds,
-      strictBounds: true
-    },
-    minZoom: 12,
-    maxZoom: 18,
-    mapTypeControl: false,
-    fullscreenControl: false
-  });
+    scrollWheelZoom: true
+});
 
-  infoWindow = new google.maps.InfoWindow();
+// 2. Add OpenStreetMap Tiles
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
 
-  applyFilters();
-  bindFilters();
-};
+const markerLayer = L.layerGroup().addTo(map);
 
-/* Color by status */
-function markerColor(status) {
-  return {
-    Planned: "blue",
-    Ongoing: "green",
-    Delayed: "red",
-    Completed: "gray"
-  }[status];
-}
-
-/* Apply filters */
-function applyFilters() {
-  const status = statusFilter.value;
-  const category = categoryFilter.value;
-
-  const filtered = PROJECTS.filter(p =>
-    (status === "all" || p.status === status) &&
-    (category === "all" || p.category === category)
-  );
-
-  renderMarkers(filtered);
-  renderList(filtered);
-}
-
-/* Render markers + InfoWindow */
-function renderMarkers(data) {
-  markers.forEach(m => m.setMap(null));
-  markers = [];
-
-  data.forEach(project => {
-    const marker = new google.maps.Marker({
-      map,
-      position: project.position,
-      title: project.name,
-      icon: `https://maps.google.com/mapfiles/ms/icons/${markerColor(project.status)}-dot.png`
-    });
-
-    marker.addListener("click", () => {
-      infoWindow.setContent(`
-        <div style="max-width:220px">
-          <strong>${project.name}</strong><br>
-          <small><b>Category:</b> ${project.category}</small><br>
-          <small><b>Status:</b> ${project.status}</small><br>
-          <small><b>Area:</b> ${project.area}</small><br>
-          <small><b>Budget:</b> ${project.budget}</small>
-        </div>
-      `);
-
-      infoWindow.open(map, marker);
-      map.panTo(project.position);
-      map.setZoom(15);
-
-      highlightProject(project.id);
-    });
-
-    markers.push(marker);
-  });
-}
-
-/* Project list */
-function renderList(data) {
-  const list = document.getElementById("projects");
-  list.innerHTML = "";
-  projectCount.textContent = data.length;
-
-  data.forEach(project => {
-    const div = document.createElement("div");
-    div.className = "project-card";
-    div.innerHTML = `
-      <strong>${project.name}</strong>
-      <span class="status ${project.status}">${project.status}</span><br>
-      <small>${project.area}</small><br>
-      <small>${project.budget} Budget</small>
-    `;
-
-    div.onclick = () => {
-      map.panTo(project.position);
-      map.setZoom(15);
-
-      infoWindow.setContent(`
-        <div style="max-width:220px">
-          <strong>${project.name}</strong><br>
-          <small><b>Category:</b> ${project.category}</small><br>
-          <small><b>Status:</b> ${project.status}</small><br>
-          <small><b>Area:</b> ${project.area}</small><br>
-          <small><b>Budget:</b> ${project.budget}</small>
-        </div>
-      `);
-
-      const marker = markers.find(m => m.getTitle() === project.name);
-      infoWindow.open(map, marker);
-
-      highlightProject(project.id);
+// 3. Status Color Mapping
+function getStatusColor(status) {
+    const colors = {
+        'Planned': '#0d6efd',   // Blue
+        'Ongoing': '#198754',   // Green
+        'Delayed': '#dc3545',   // Red
+        'Completed': '#6c757d'  // Gray
     };
-
-    list.appendChild(div);
-  });
+    return colors[status] || '#333';
 }
 
-/* Highlight active project */
-function highlightProject(id) {
-  const active = PROJECTS.find(p => p.id === id).name;
-  document.querySelectorAll(".project-card").forEach(card =>
-    card.classList.toggle("active", card.innerText.includes(active))
-  );
+// 4. Main Render Function
+function renderMap(data) {
+    const listArea = document.getElementById('projectList');
+    const countLabel = document.getElementById('projectCount');
+    
+    // Clear previous items
+    listArea.innerHTML = '';
+    markerLayer.clearLayers();
+    countLabel.innerText = data.length;
+
+    data.forEach(proj => {
+        // Create Sidebar List Item
+        const item = document.createElement('div');
+        item.className = 'project-item p-3 border-bottom';
+        item.innerHTML = `
+            <div class="d-flex justify-content-between align-items-start">
+                <span class="fw-bold small">${proj.name}</span>
+                <span class="badge" style="background-color: ${getStatusColor(proj.status)}; font-size: 0.7rem;">${proj.status}</span>
+            </div>
+            <div class="text-muted small mt-1"><i class="bi bi-geo-alt"></i> ${proj.location}</div>
+        `;
+        
+        // Fly to location on click
+        item.onclick = () => {
+            map.flyTo([proj.lat, proj.lng], 16);
+            openProjectPopup(proj);
+        };
+        listArea.appendChild(item);
+
+        // CREATE BOOTSTRAP ICON PIN
+        const pinIcon = L.divIcon({
+            html: `<i class="bi bi-geo-alt-fill" style="color: ${getStatusColor(proj.status)};"></i>`,
+            className: 'custom-pin', // Uses the CSS we added to the PHP file
+            iconSize: [30, 30],
+            iconAnchor: [15, 30],   // Points the bottom tip of the pin to the lat/lng
+            popupAnchor: [0, -32]   // Positions popup above the pin
+        });
+
+        // Add Marker to Map
+        L.marker([proj.lat, proj.lng], { icon: pinIcon })
+            .addTo(markerLayer)
+            .on('click', () => openProjectPopup(proj));
+    });
 }
 
-/* Bind filter events */
-function bindFilters() {
-  statusFilter.onchange = categoryFilter.onchange = applyFilters;
-
-  clearFilters.onclick = () => {
-    statusFilter.value = "all";
-    categoryFilter.value = "all";
-    applyFilters();
-  };
+// 5. Popup Function
+function openProjectPopup(proj) {
+    const content = `
+        <div class="p-2" style="min-width: 200px;">
+            <h6 class="fw-bold mb-1">${proj.name}</h6>
+            <p class="text-muted mb-2 small">${proj.location}</p>
+            <hr class="my-2">
+            <div class="small mb-1"><strong>Budget:</strong> ${proj.budget}</div>
+            <button class="btn btn-primary btn-sm w-100 fw-bold">View Full Details</button>
+        </div>
+    `;
+    L.popup()
+        .setLatLng([proj.lat, proj.lng])
+        .setContent(content)
+        .openOn(map);
 }
+
+// 6. Filter Listeners
+function applyFilters() {
+    const s = document.getElementById('statusFilter').value;
+    const c = document.getElementById('categoryFilter').value;
+    
+    const filtered = projects.filter(p => {
+        const statusMatch = (s === 'all' || p.status === s);
+        const categoryMatch = (c === 'all' || p.category === c);
+        return statusMatch && categoryMatch;
+    });
+    renderMap(filtered);
+}
+
+document.getElementById('statusFilter').addEventListener('change', applyFilters);
+document.getElementById('categoryFilter').addEventListener('change', applyFilters);
+document.getElementById('clearFilters').addEventListener('click', () => {
+    document.getElementById('statusFilter').value = 'all';
+    document.getElementById('categoryFilter').value = 'all';
+    renderMap(projects);
+});
+
+// Initial Load
+renderMap(projects);

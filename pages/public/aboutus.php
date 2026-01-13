@@ -1,3 +1,7 @@
+<?php 
+    $current_page = 'aboutUs'; 
+?>
+
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
   <head>
@@ -72,8 +76,8 @@
                             <div class="card stat-card py-4 px-3">
                                 <div class="text-start">
                                     <div>
-                                        <div class="py-1 px-3 rounded-circle bg-color-primary shadow-sm mb-3 d-inline-block">
-                                            <i class="bi bi-bullseye text-light fs-3"></i>
+                                        <div class="py-1 px-2 rounded-circle bg-color-primary shadow-sm mb-3 d-inline-block">
+                                            <i class="bi bi-bullseye text-light fs-5"></i>
                                         </div>
                                         <h3 class="fw-medium mb-0 fs-5 mb-2">Our Mission</h3>
                                         <p class="text-muted small mb-0 fs-6">To empower Quezon City citizens with real-time access to government project information, fostering transparency,
@@ -88,8 +92,8 @@
                             <div class="card stat-card py-4 px-3">
                                 <div class="text-start">
                                     <div>
-                                        <div class="py-1 px-3 rounded-circle bg-color-primary shadow-sm mb-3 d-inline-block">
-                                            <i class="bi bi-eye text-light fs-3"></i>
+                                        <div class="py-1 px-2 rounded-circle bg-color-primary shadow-sm mb-3 d-inline-block">
+                                            <i class="bi bi-eye text-light fs-5"></i>
                                         </div>
                                         <h3 class="fw-medium mb-0 fs-5 mb-2">Our Vision</h3>
                                         <p class="text-muted small mb-0 fs-6">To establish Quezon City as a model of digital governance in the Philippines, where technology bridges the gap between government and citizens.
@@ -102,53 +106,52 @@
                 </div>
             </section>
  
-            <section class="container text-center py-4 mt-5">
+            <section class="container-fluid bg-color-background text-center py-5 my-5">
                 <div class="title-section mb-4">
                     <h2 class="fw-medium">What is QTrace?</h2>
                     <p class="text-muted lead mb-5 w-75 m-auto">QTRACE (Quezon City Transparency, Accountability, and Citizen Engagement) is the official digital platform of the Quezon City Government
                         designed to provide complete transparency in public infrastructure projects and government initiatives.</p>
                 </div>
- 
-                <section class="container text-center py-5 mt-4">
+
                 <div class="container">
                     <div class="row g-4">
                         <div class="col-md-4">
-                            <div class="card stat-card py-4 px-3" style="background-color: #edfded;">
+                            <div class="card stat-card py-4 px-3" >
                                 <div class="text-start">
-                                    <div class="p-2 bg-white rounded shadow-sm d-inline-flex align-items-center justify-content-center">
-                                        <i class="bi bi-hourglass-split text-success fs-3 "></i>
+                                    <div class="px-2 py-1 mb-3 rounded shadow-sm d-inline-flex align-items-center justify-content-center" style="background-color: #edfded;">
+                                        <i class="bi bi-hourglass-split text-success fs-4 "></i>
                                     </div>
                                     <div>
                                         <h3 class="fw-medium mb-0 fs-5 mb-2">Real-Time Tracking</h3>
-                                        <p class="text-muted small mb-0 fs-8">Monitor government projects from planning to completion with live updates and progress reports.</p>
+                                        <p class="text-muted small mb-0">Monitor government projects from planning to completion with live updates and progress reports.</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
  
                         <div class="col-md-4">
-                            <div class="card stat-card py-4 px-3" style="background-color: #f3fbfd;">
+                            <div class="card stat-card py-4 px-3" >
                                 <div class="text-start">
-                                    <div class="p-2 bg-white rounded shadow-sm d-inline-flex align-items-center justify-content-center">
-                                        <i class="bi bi-file-earmark-text text-primary fs-3"></i>
+                                    <div class="px-2 py-1 mb-3 rounded shadow-sm d-inline-flex align-items-center justify-content-center" style="background-color: #f3fbfd;">
+                                        <i class="bi bi-file-earmark-text text-primary fs-4"></i>
                                     </div>
                                     <div>
                                         <h3 class="fw-medium mb-0 fs-5 mb-2">Document Verification</h3>
-                                        <p class="text-muted small mb-0 fs-8">Access official project documents, budgets, and contractor information for full transparency.</p>
+                                        <p class="text-muted small mb-0 ">Access official project documents, budgets, and contractor information for full transparency.</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
  
                         <div class="col-md-4">
-                            <div class="card stat-card py-4 px-3" style="background-color: #fff8e3;">
+                            <div class="card stat-card py-4 px-3" >
                                 <div class="text-start">
-                                    <div class="p-2 bg-white rounded shadow-sm d-inline-flex align-items-center justify-content-center">
-                                        <i class="bi bi-people text-warning fs-3"></i>
+                                    <div class="px-2 py-1 mb-3 rounded shadow-sm d-inline-flex align-items-center justify-content-center" style="background-color: #fff8e3;">
+                                        <i class="bi bi-people text-warning fs-4"></i>
                                     </div>
                                     <div>
                                         <h3 class="fw-medium mb-0 fs-5 mb-2">Citizen Reporting</h3>
-                                        <p class="text-muted small mb-0 fs-8">Report issues, concerns, or observations directly to government officials for immediate action.</p>
+                                        <p class="text-muted small mb-0">Report issues, concerns, or observations directly to government officials for immediate action.</p>
                                     </div>
                                 </div>
                             </div>
@@ -157,7 +160,7 @@
                 </div>
             </section>
  
-            <section class="container text-center py-4 mt-4">
+            <section class="container text-center py-5 my-5">
                 <div class="title-section mb-4">
                     <h2 class="fw-bold">Our Core Values</h2>
                     <p class="text-muted lead mb-5 w-75 m-auto">The principles that guide QTrace in serving the people of Quezon City</p>
@@ -168,12 +171,12 @@
                         <div class="col-md-3">
                             <div class="card stat-card py-4 px-3">
                                 <div class="text-center">
-                                    <div class="py-3 px-4 rounded-circle bg-color-primary shadow-sm mb-3 d-inline-block">
-                                        <i class="bi bi-shield text-light fs-3"></i>
+                                    <div class="py-2 px-3 rounded-circle bg-color-primary shadow-sm mb-3 d-inline-block">
+                                        <i class="bi bi-shield text-light fs-4"></i>
                                     </div>
                                     <div>
                                         <h3 class="fw-medium text-center mb-0 fs-5 mb-2">Integrity</h3>
-                                        <p class="text-muted text-center small mb-0 fs-8">Maintaining the highest standards of honesty and transparency in all operations.</p>
+                                        <p class="text-muted text-center small mb-0 ">Maintaining the highest standards of honesty and transparency in all operations.</p>
                                     </div>
                                 </div>
                             </div>
@@ -182,12 +185,12 @@
                         <div class="col-md-3">
                             <div class="card stat-card py-4 px-3">
                                 <div class="text-center">
-                                    <div class="py-3 px-4 rounded-circle bg-color-primary shadow-sm mb-3 d-inline-block">
-                                        <i class="bi bi-heart text-light fs-3"></i>
+                                    <div class="py-2 px-3 rounded-circle bg-color-primary shadow-sm mb-3 d-inline-block">
+                                        <i class="bi bi-heart text-light fs-4"></i>
                                     </div>
                                     <div>
                                         <h3 class="fw-medium text-center mb-0 fs-5 mb-2">Service</h3>
-                                        <p class="text-muted text-center small mb-0 fs-8">Dedicated to serving the citizens of Quezon City with excellence and compassion.</p>
+                                        <p class="text-muted text-center small mb-0 ">Dedicated to serving the citizens of Quezon City with excellence and compassion.</p>
                                     </div>
                                 </div>
                             </div>
@@ -196,12 +199,12 @@
                         <div class="col-md-3">
                             <div class="card stat-card py-4 px-3">
                                 <div class="text-center">
-                                    <div class="py-3 px-4 rounded-circle bg-color-primary shadow-sm mb-3 d-inline-block">
+                                    <div class="py-2 px-3 rounded-circle bg-color-primary shadow-sm mb-3 d-inline-block">
                                         <i class="bi bi-graph-up-arrow text-light fs-3"></i>
                                     </div>
                                     <div>
                                         <h3 class="fw-medium text-center mb-0 fs-5 mb-2">Innovation</h3>
-                                        <p class="text-muted text-center small mb-0 fs-8">Leveraging technology to continuously improve governance and public service delivery.</p>
+                                        <p class="text-muted text-center small mb-0 ">Leveraging technology to continuously improve governance and public service delivery.</p>
                                     </div>
                                 </div>
                             </div>
@@ -210,12 +213,12 @@
                         <div class="col-md-3">
                             <div class="card stat-card py-4 px-3">
                                 <div class="text-center">
-                                    <div class="py-3 px-4 rounded-circle bg-color-primary shadow-sm mb-3 d-inline-block">
+                                    <div class="py-2 px-3 rounded-circle bg-color-primary shadow-sm mb-3 d-inline-block">
                                         <i class="bi bi-people text-light fs-3"></i>
                                     </div>
                                     <div>
                                         <h3 class="fw-medium text-center mb-0 fs-5 mb-2">Collaboration</h3>
-                                        <p class="text-muted text-center small mb-0 fs-8">Building partnerships between government, citizens, and contractors for community progress.</p>
+                                        <p class="text-muted text-center small mb-0 ">Building partnerships between government, citizens, and contractors for community progress.</p>
                                     </div>
                                 </div>
                             </div>
@@ -224,15 +227,15 @@
                 </div>
             </section>
 
-            <section class="container text-center py-4 mt-4">
+            <section class="container-fluid bg-color-background text-center py-5 my-5">
                 <div class="title-section mb-4">
                     <h2 class="fw-medium">Quezon City Government</h2>
                     <p class="text-muted lead mb-5 w-75 m-auto">Leadership committed to transparency, accountability, and innovative governance</p>
                 </div>
-                <div class="col-md-12 mx-auto">
+                <div class="container mb-4">
                     <div class="card stat-card py-4 px-3">
                         <div class="d-flex align-items-center gap-3">
-                            <div class="py-3 px-4 rounded-circle bg-color-primary shadow-sm flex-shrink-0">
+                            <div class="py-2 px-3 rounded-circle bg-color-primary shadow-sm flex-shrink-0">
                                 <i class="bi bi-building text-light fs-3"></i>
                                 </div>
                                     <div>
@@ -247,9 +250,7 @@
                             </div>
                     </div>
                 </div>
-            </section>
 
-            <section class="container text-center py-2 mt-4">
                 <div class="container">
                     <div class="row g-4">
                         <div class="col-md-4">
@@ -297,48 +298,48 @@
                 <div class="container">
                     <div class="row g-4">
                         <div class="col-md-3">
-                            <div class="card stat-card py-2 px-2">
+                            <div class="card stat-card p-4">
                                 <div class="text-center">
                                     <div class="fs-1 text-primary-emphasis">150+</div>
                                     <div>
                                         <h3 class="fw-medium text-center mb-0 fs-5 mb-2">Active Projects</h3>
-                                        <p class="text-muted text-center small mb-0 fs-8">Currently being tracked and monitored</p>
+                                        <p class="text-muted text-center small mb-0 ">Currently being tracked and monitored</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
  
                         <div class="col-md-3">
-                            <div class="card stat-card py-2 px-2">
+                            <div class="card stat-card p-4">
                                 <div class="text-center">
                                     <div class="fs-1 text-primary-emphasis">89</div>
                                     <div>
                                         <h3 class="fw-medium text-center mb-0 fs-5 mb-2">Completed Projects</h3>
-                                        <p class="text-muted text-center small mb-0 fs-8">Successfully delivered to communities</p>
+                                        <p class="text-muted text-center small mb-0 ">Successfully delivered to communities</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="col-md-3">
-                            <div class="card stat-card py-2 px-2">
+                            <div class="card stat-card p-4">
                                 <div class="text-center">
                                     <div class="fs-1 text-primary-emphasis">2450+</div>
                                     <div>
                                         <h3 class="fw-medium text-center mb-0 fs-5 mb-2">Registered Citizens</h3>
-                                        <p class="text-muted text-center small mb-0 fs-8">Actively engaged in monitoring</p>
+                                        <p class="text-muted text-center small mb-0 ">Actively engaged in monitoring</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="col-md-3">
-                            <div class="card stat-card py-2 px-2">
+                            <div class="card stat-card p-4">
                                 <div class="text-center">
                                     <div class="fs-1 text-primary-emphasis">98%</div>
                                     <div>
                                         <h3 class="fw-medium text-center mb-0 fs-5 mb-2">Report Resolution</h3>
-                                        <p class="text-muted text-center small mb-0 fs-8">Citizen concerns addressed</p>
+                                        <p class="text-muted text-center small mb-0 ">Citizen concerns addressed</p>
                                     </div>
                                 </div>
                             </div>
@@ -347,70 +348,10 @@
                 </div>
             </section>
             
-            <section class="container text-center py-5 mt-4">
-                <div class="py-3 px-4 rounded-circle bg-color-primary shadow-sm d-inline-block mb-3">
-                    <i class="bi bi-award text-light fs-3"></i>
-                </div>
-                <div class="title-section mb-4">
-                    <h2 class="fw-medium text-center">Awards & Recognitions</h2>
-                    <p class="text-muted text-center lead mb-5 w-75 m-auto">QTrace has been recognized for excellence in digital governance and transparency</p>
-                </div>
-                
-                <div class="container">
-                    <div class="row g-4">
-                        <div class="col-md-6">
-                            <div class="card stat-card py-4 px-3">
-                                <div class="text-start">
-                                    <div class="text-start fs-3 text-primary-emphasis">2024</div>
-                                    <div>
-                                        <h3 class="fw-medium text-start mb-0 fs-5 mb-2">Excellence in E-Governance</h3>
-                                        <p class="text-muted text-start small mb-0 fs-8">Department of Information and Communications Technology</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
- 
-                        <div class="col-md-6">
-                            <div class="card stat-card py-4 px-3">
-                                <div class="text-start">
-                                    <div class="text-start fs-3 text-primary-emphasis">2024</div>
-                                    <div>
-                                        <h3 class="fw-medium text-start mb-0 fs-5 mb-2">Transparency Seal Award</h3>
-                                        <p class="text-muted text-start small mb-0 fs-8">Philippine Information Agency</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+        
 
-                        <div class="col-md-6">
-                            <div class="card stat-card py-4 px-3">
-                                <div class="text-start">
-                                    <div class="text-start fs-3 text-primary-emphasis">2023</div>
-                                    <div>
-                                        <h3 class="fw-medium text-start mb-0 fs-5 mb-2">Innovation in Local Government</h3>
-                                        <p class="text-muted text-start small mb-0 fs-8">League of Cities of the Philippines</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="card stat-card py-4 px-3">
-                                <div class="text-start">
-                                    <div class="text-start fs-3 text-primary-emphasis">2023</div>
-                                    <div>
-                                        <h3 class="fw-medium text-start mb-0 fs-5 mb-2">Citizen Engagement Platform of the Year</h3>
-                                        <p class="text-muted text-start small mb-0 fs-8">Digital Government Forum</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-             <section class="container text-center py-4 mt-4">
-                <div class="card bg-color-primary text-light py-4 rounded-5" style="width: 100%;margin:auto;">
+             <section class=" text-center py-4 mt-4">
+                <div class="card bg-color-primary text-light py-4 rounded-0">
                     <div class="card-body p-5">
                         <div class="title-section mb-1 py-lg-4 px-lg-5">
                             <h2 class="fw-bold fs-3 mb-3">Join the Movement</h2>
@@ -418,7 +359,7 @@
                         </div>
                         <div class="d-grid d-md-flex justify-content-md-center gap-3 gap-md-5">
                             <button class="btn px-5 py-2 fw-bold text-white" style="background-color: var(--accent) !important;">
-                                Register As Citezen
+                                Register As Citizen
                             </button>
                             <button class="btn btn-light border px-5 py-2 fw-bold">
                                 Explore Projects
@@ -429,42 +370,45 @@
             </section>
 
             <section class="container text-center py-5 mt-4">
-                <h2 class="fw-bold mb-5">Get in Touch</h2>
-                <div class="row g-4">
-                    <div class="col-md-4">
-                        <div class="text-center">
-                            <div class="mb-3">
-                                <i class="bi bi-building text-primary fs-1"></i>
+                <div class="card stat-card p-5">
+                    <h2 class="fw-bold mb-5">Get in Touch</h2>
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <div class="mb-3">
+                                    <i class="bi bi-building text-primary fs-1"></i>
+                                </div>
+                                <h3 class="fw-semibold fs-5 mb-3">Visit Us</h3>
+                                <p class="text-muted mb-1">Quezon City Hall</p>
+                                <p class="text-muted mb-1">Elliptical Road, Diliman</p>
+                                <p class="text-muted mb-0">Quezon City, Metro Manila</p>
                             </div>
-                            <h3 class="fw-semibold fs-5 mb-3">Visit Us</h3>
-                            <p class="text-muted mb-1">Quezon City Hall</p>
-                            <p class="text-muted mb-1">Elliptical Road, Diliman</p>
-                            <p class="text-muted mb-0">Quezon City, Metro Manila</p>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="text-center">
-                            <div class="mb-3">
-                                <i class="bi bi-people text-success fs-1"></i>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <div class="mb-3">
+                                    <i class="bi bi-people text-success fs-1"></i>
+                                </div>
+                                <h3 class="fw-semibold fs-5 mb-3">Contact Us</h3>
+                                <p class="text-muted mb-1">Phone: +63 2 8988 4242</p>
+                                <p class="text-muted mb-1">Email: qtrace@quezoncity.gov.ph</p>
+                                <p class="text-muted mb-0">Hotline: 122 (QC Hotline)</p>
                             </div>
-                            <h3 class="fw-semibold fs-5 mb-3">Contact Us</h3>
-                            <p class="text-muted mb-1">Phone: +63 2 8988 4242</p>
-                            <p class="text-muted mb-1">Email: qtrace@quezoncity.gov.ph</p>
-                            <p class="text-muted mb-0">Hotline: 122 (QC Hotline)</p>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="text-center">
-                            <div class="mb-3">
-                                <i class="bi bi-globe text-primary fs-1"></i>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <div class="mb-3">
+                                    <i class="bi bi-globe text-primary fs-1"></i>
+                                </div>
+                                <h3 class="fw-semibold fs-5 mb-3">Office Hours</h3>
+                                <p class="text-muted mb-1">Monday - Friday</p>
+                                <p class="text-muted mb-1">8:00 AM - 5:00 PM</p>
+                                <p class="text-muted mb-0">(Except Holidays)</p>
                             </div>
-                            <h3 class="fw-semibold fs-5 mb-3">Office Hours</h3>
-                            <p class="text-muted mb-1">Monday - Friday</p>
-                            <p class="text-muted mb-1">8:00 AM - 5:00 PM</p>
-                            <p class="text-muted mb-0">(Except Holidays)</p>
                         </div>
                     </div>
                 </div>
+                
             </section>
         </main>
         <?php
