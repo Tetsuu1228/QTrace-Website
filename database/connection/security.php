@@ -12,7 +12,7 @@ $timeout_duration = 300;
 if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $timeout_duration) {
     session_unset();
     session_destroy();
-    header("Location: /QTrace-Website/login?timeout");
+    header("Location: /QTrace-Website/login?status=timeout");
     exit();
 }
 $_SESSION['last_activity'] = time();

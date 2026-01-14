@@ -21,7 +21,7 @@
                   <a class="nav-link <?php echo ($current_page == 'map') ? 'active' : ''; ?>" href="/QTrace-Website/map">Map</a>
               </li>
               <li class="nav-item px-3">
-                  <a class="nav-link <?php echo ($current_page == 'contractors') ? 'active' : ''; ?>" href="/QTrace-Website/contractors">Contractors</a>
+                  <a class="nav-link <?php echo ($current_page == 'contractor') ? 'active' : ''; ?>" href="/QTrace-Website/contractors">Contractors</a>
               </li>
               <li class="nav-item px-3">
                   <a class="nav-link <?php echo ($current_page == 'aboutUs') ? 'active' : ''; ?>" href="/QTrace-Website/about">About Us</a>

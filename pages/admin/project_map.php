@@ -1,32 +1,9 @@
-<?php
-$current_page = 'projectMap';
-require_once '../../database/connection/connection.php';
-
-// Get available statuses from database
-$statuses = [];
-$categories = [];
-
-// Fetch project statuses
-$status_sql = "SELECT DISTINCT ps.status_name FROM project_status ps 
-              INNER JOIN projects_table pt ON ps.status_id = pt.status_id 
-              WHERE ps.status_name IS NOT NULL 
-              ORDER BY ps.status_name ASC";
-$status_result = $conn->query($status_sql);
-if ($status_result->num_rows > 0) {
-    while ($row = $status_result->fetch_assoc()) {
-        $statuses[] = $row['status_name'];
-    }
-}
-
-// Fetch project categories
-$category_sql = "SELECT DISTINCT Category_Name FROM project_categories WHERE Category_Name IS NOT NULL";
-$category_result = $conn->query($category_sql);
-if ($category_result->num_rows > 0) {
-    while ($row = $category_result->fetch_assoc()) {
-        $categories[] = $row['Category_Name'];
-    }
-}
+<?php 
+  $page_name = 'projectMap'; 
+  require('../../database/controllers/get_projectMap.php');
+  include('../../database/connection/security.php');
 ?>
+
 
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
@@ -36,186 +13,185 @@ if ($category_result->num_rows > 0) {
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- SEO -->
-    <meta name="description" content="View all projects on an interactive map in the QTRACE system."/>
+    <meta name="description" content="Interactive map displaying all ongoing and completed projects in Quezon City for enhanced transparency and monitoring."/>
     <meta name="author" content="Confractus" />
     <link rel="icon" type="image/png" sizes="16x16" href="" />
     <title>QTrace - Project Map</title>
     <!-- Bootstrap CSS Link-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Basta need toh-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
-      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <!-- General Css Link -->
     <link rel="stylesheet" href="/QTrace-Website/assets/css/styles.css" />
-    <!-- Map CSS -->
-    <link rel="stylesheet" href="/QTrace-Website/assets/css/map.css" />
+    <!-- Map Link -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Custome Css For This Page Only  -->
     <style>
-      /* Admin-specific map styling */
-      .main-view {
-        padding: 0;
-      }
-      
-      .map-admin-container {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-      }
-      
-      .map-header {
-        padding: 24px 32px;
-        background: white;
-        border-bottom: 1px solid #e5e7eb;
-      }
-      
-      .map-header h2 {
-        margin: 0 0 8px;
-        font-size: 24px;
-        font-weight: bold;
-      }
-      
-      .map-header p {
-        margin: 0;
-        color: #6b7280;
-        font-size: 14px;
-      }
-      
-      .map-content {
-        display: flex;
-        gap: 24px;
-        padding: 24px 32px;
-        flex: 1;
-        overflow: hidden;
-      }
-      
-      /* Override map wrapper height */
-      .map-wrapper {
-        height: calc(100vh - 280px);
-      }
-      
-      .sidebar {
-        width: 320px;
-        max-width: 100%;
-      }
-      
-      @media (max-width: 1024px) {
-        .map-content {
-          flex-direction: column;
-          height: auto;
+        /* Map Legend Overlay */
+        .map-legend { 
+            position: absolute; 
+            top: 20px; 
+            right: 20px; 
+            z-index: 1000; 
+            background: white; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 12px; 
+            min-width: 140px;
+        }
+        .legend-item { 
+            display: flex; 
+            align-items: center; 
+            font-size: 0.8rem; 
+            margin-bottom: 5px; 
+        }
+        .dot { 
+            height: 10px; 
+            width: 10px; 
+            border-radius: 50%; 
+            display: inline-block; 
+            margin-right: 10px; 
         }
         
-        .sidebar {
-          width: 100%;
+        /*  Map  */
+        #map { 
+            height: 100%; 
+            width: 100%; 
+            border-radius: 12px; 
+            z-index: 1;
+            min-height: 400px; 
         }
-        
-        .map-wrapper {
-          height: 500px;
+        .col-md-8 { 
+            position: relative; 
         }
-      }
+
+        /* Custom Pin Styling  */
+        .custom-pin { 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+        }
+        .custom-pin i { 
+            font-size: 2.2rem; 
+            filter: drop-shadow(0px 3px 2px rgba(0,0,0,0.3)); 
+        }
+
+        .project-list-area { 
+            max-height: 400px; 
+            overflow-y: auto; 
+        }
+        .project-item { 
+            cursor: pointer; 
+            padding: 10px; 
+            border-bottom: 1px solid #eee; 
+            transition: 0.2s; 
+        }
+        .project-item:hover { 
+            background: #f8f9fa; 
+        }
+
+        @media (min-width: 768px) {
+        .map-row {
+            height: 70dvh;     
+        }
+    }
     </style>
-  </head>
-  <body>
+
+    <body>
     <div class="app-container">
-        
-        <?php
-            // Header Include
-            include('../../components/header.php');
-        ?>
+        <?php include('../../components/header.php'); ?>
 
         <div class="content-area">
-            <?php
-                // Sidebar Include
-                include('../../components/sideNavigation.php');
-            ?>
+            <?php include('../../components/sideNavigation.php'); ?>
 
-        <main class="main-view">
-          <div class="map-admin-container">
-            
-            <!-- Page Header -->
-            <div class="map-header">
-              <nav aria-label="breadcrumb" class="mb-3">
-                <ol class="breadcrumb mb-0">
-                  <li class="breadcrumb-item">
-                    <a href="/QTrace-Website/dashboard">Home</a>
-                  </li>
-                  <li class="breadcrumb-item active">Project Map</li>
-                </ol>
-              </nav>
-              <h2>Project Map</h2>
-              <p>View and manage all projects on an interactive map of Quezon City</p>
+            <main class="main-view">
+                <div class="container-fluid">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/QTrace-Website/dashboard">Home</a></li>
+                            <li class="breadcrumb-item active">Project Map</li>
+                        </ol>
+                    </nav>
+
+                    <div class="row mb-3">
+                        <div class="col-md-12">
+                            <h2 class="fw-bold">Project Map</h2>
+                            <p class="text-muted">Interactive map displaying all ongoing and completed projects in Quezon City for enhanced transparency and monitoring</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row gap-4 gap-md-0 map-row">
+                <div class="col-md-4">
+                    <div class="card shadow-sm mb-3">
+                        <div class="card-body">
+                            <div class="filter-section">
+                                <h6 class="fw-bold mb-3 text-secondary small">SEARCH FILTERS</h6>
+                                <div class="row g-2">
+                                    <div class="col-12 mb-2">
+                                        <select id="statusFilter" class="form-select form-select-sm shadow-none">
+                                            <option value="all">All Statuses</option>
+                                            <option value="Planned">Planned</option>
+                                            <option value="Ongoing">Ongoing</option>
+                                            <option value="Delayed">Delayed</option>
+                                            <option value="Completed">Completed</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <select id="categoryFilter" class="form-select form-select-sm shadow-none">
+                                            <option value="all">All Categories</option>
+                                            <option value="Infrastructure">Infrastructure</option>
+                                            <option value="Environmental">Environmental</option>
+                                            <option value="Social Services">Social Services</option>
+                                            <option value="Safety">Safety</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <button id="clearFilters" class="btn btn-light btn-sm w-100 border fw-bold text-muted">Clear All</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-light px-3 py-2 border rounded-top d-flex justify-content-between align-items-center">
+                        <span class="small fw-bold text-uppercase text-secondary">Projects Found</span>
+                        <span id="projectCount" class="badge bg-primary rounded-pill">0</span>
+                    </div>
+                    <div id="projectList" class="project-list-area border border-top-0 rounded-bottom bg-white">
+                        </div>
+                </div>
+
+                <div class="col-md-8">
+                    <div id="map" class="shadow-sm"></div>
+                    <div class="map-legend">
+                        <h6 class="fw-bold small border-bottom pb-2 mb-2">Status Key</h6>
+                        <div class="legend-item"><span class="dot bg-primary"></span> Planned</div>
+                        <div class="legend-item"><span class="dot bg-success"></span> Ongoing</div>
+                        <div class="legend-item"><span class="dot bg-danger"></span> Delayed</div>
+                        <div class="legend-item"><span class="dot bg-secondary"></span> Completed</div>
+                    </div>
+                </div>
             </div>
-
-            <!-- Map Content -->
-            <div class="map-content">
-
-              <!-- LEFT PANEL -->
-              <aside class="sidebar">
-
-                <!-- FILTERS -->
-                <div class="card">
-                  <h2>Filters</h2>
-
-                  <label>Status</label>
-                  <select id="statusFilter">
-                    <option value="all">All Statuses</option>
-                    <?php foreach ($statuses as $status): ?>
-                      <option value="<?php echo htmlspecialchars($status); ?>">
-                        <?php echo htmlspecialchars($status); ?>
-                      </option>
-                    <?php endforeach; ?>
-                  </select>
-
-                  <label>Category</label>
-                  <select id="categoryFilter">
-                    <option value="all">All Categories</option>
-                    <?php foreach ($categories as $category): ?>
-                      <option value="<?php echo htmlspecialchars($category); ?>">
-                        <?php echo htmlspecialchars($category); ?>
-                      </option>
-                    <?php endforeach; ?>
-                  </select>
-
-                  <button id="clearFilters">Clear Filters</button>
                 </div>
-
-                <!-- PROJECT LIST -->
-                <div class="card project-list">
-                  <h2>Projects (<span id="projectCount">0</span>)</h2>
-                  <div id="projects">
-                    <div style="padding: 10px; color: #9ca3af;">Loading projects...</div>
-                  </div>
-                </div>
-
-              </aside>
-
-              <!-- MAP -->
-              <main class="map-wrapper">
-                <div id="map"></div>
-
-                <!-- LEGEND -->
-                <div class="legend">
-                  <strong>Status Legend</strong>
-                  <div><span class="dot planned"></span> Planned</div>
-                  <div><span class="dot ongoing"></span> Ongoing</div>
-                  <div><span class="dot delayed"></span> Delayed</div>
-                  <div><span class="dot completed"></span> Completed</div>
-                </div>
-              </main>
-
-            </div>
-          </div>
-        </main>
-      </div>
+            </main>
+        </div>
     </div>
-    
-    <!-- Scripts -->
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <script src="/QTrace-Website/assets/js/map.js"></script>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-  </body>
+        <!-- Custome Script For This Page Only  -->     
+        <script>
+            const projects = <?php echo json_encode($projects); ?>;
+                const userRole = "<?php echo $_SESSION['role']; ?>";
+        </script>
+
+        <!-- Map Link -->
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+        <!-- Reusable Script -->
+        <script src="/QTrace-Website/assets/js/map.js"></script>
+        <script src="/QTrace-Website/assets/js/mouseMovement.js"></script>
+
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+        
+    </body>
 </html>

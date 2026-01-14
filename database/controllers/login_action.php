@@ -8,8 +8,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $pass = $_POST['user_Password'] ?? '';
 
     if (empty($user) || empty($pass)) {
+        $_SESSION['error'] = "Please fill in all fields.";
         header("Location: /QTrace-Website/login?error=empty_fields");
         exit();
+        
     }
 
     // 1. Prepare statement - Added user_Role to the SELECT statement
@@ -44,16 +46,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     header("Location: /QTrace-Website/dashboard");
                     exit();
                 }else{
-                    header("Location: /QTrace-Website/home");
+                    header("Location: /QTrace-Website/home?role={$_SESSION['role']}");
                     exit();
                 }
             } else {
                 // Password incorrect
+                $_SESSION['error'] = "Invalid email or password.";
                 header("Location: /QTrace-Website/login?error=invalid_credentials");
                 exit();
             }
         } else {
             // User ID not found
+            $_SESSION['error'] = "Invalid email or password.";
             header("Location: /QTrace-Website/login?error=invalid_credentials");
             exit();
         }

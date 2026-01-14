@@ -1,7 +1,7 @@
 <?php 
     $current_page = 'map'; 
     require('../../database/controllers/get_projectMap.php');
-
+    session_start();
 ?>
 
 <!DOCTYPE html>
@@ -57,7 +57,8 @@
             height: 100%; 
             width: 100%; 
             border-radius: 12px; 
-            z-index: 1; 
+            z-index: 1;
+            min-height: 400px; 
         }
         .col-md-8 { 
             position: relative; 
@@ -87,20 +88,26 @@
         .project-item:hover { 
             background: #f8f9fa; 
         }
+
+        @media (min-width: 768px) {
+        .map-row {
+            height: 70dvh;     
+        }
+    }
     </style>
 
-    <body>
+    <body class="bg-color-background">
         <?php
             include('../../components/topNavigation.php');
         ?>
 <main>
-        <section class="container py-5">
+        <section class="container py-5" >
             <div class="title-section mb-4">
                 <h2 class="fw-bold">Interactive Project Map</h2>
                 <p class="text-muted">Explore all government projects across Quezon City. Click on any project to view details.</p>
             </div>
             
-            <div class="row gap-4 gap-md-0">
+            <div class="row gap-4 gap-md-0 map-row">
                 <div class="col-md-4">
                     <div class="card shadow-sm mb-3">
                         <div class="card-body">
@@ -119,10 +126,10 @@
                                     <div class="col-12 mb-3">
                                         <select id="categoryFilter" class="form-select form-select-sm shadow-none">
                                             <option value="all">All Categories</option>
-                                            <option value="Road">Roads</option>
-                                            <option value="School">Education</option>
-                                            <option value="Health">Healthcare</option>
-                                            <option value="Drainage">Drainage</option>
+                                            <option value="Infrastructure">Infrastructure</option>
+                                            <option value="Environmental">Environmental</option>
+                                            <option value="Social Services">Social Services</option>
+                                            <option value="Safety">Safety</option>
                                         </select>
                                     </div>
                                     <div class="col-12">
@@ -163,6 +170,7 @@
         <!-- Custome Script For This Page Only  -->     
         <script>
             const projects = <?php echo json_encode($projects); ?>;
+            const userRole = "<?php echo $_SESSION['role']; ?>";
         </script>
 
         <!-- Map Link -->

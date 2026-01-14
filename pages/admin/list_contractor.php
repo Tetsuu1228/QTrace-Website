@@ -1,7 +1,9 @@
 <?php 
-    $current_page = 'contractorList'; 
-    require('../../database/controllers/get_contractor.php');
+    $page_name = 'contractorList'; 
+
     include('../../database/connection/security.php');
+    require('../../database/controllers/get_admin_contractor_list.php');
+
 ?>
 
 <!DOCTYPE html>
@@ -67,20 +69,20 @@
                         <div class="card border-0 shadow-sm mb-4">
                             <div class="card-body">
                                 <form method="GET" class="row g-3">
-                                    <div class="col-md-5">
-                                        <label class="form-label fw-bold">Filter by Skill</label>
+                                    <div class="col-lg-5">
+                                        <label class="form-label fw-bold text-muted">Filter by Skill</label>
                                         <input type="text" name="skill" class="form-control" placeholder="e.g. Plumbing, Electrical" value="<?= $search_skill ?>">
                                     </div>
-                                    <div class="col-md-4">
-                                        <label class="form-label fw-bold">Min. Experience (Years)</label>
+                                    <div class="col-lg-4">
+                                        <label class="form-label fw-bold text-muted">Min. Experience (Years)</label>
                                         <input type="number" name="min_years" class="form-control" placeholder="0" min="0" value="<?= $min_years > 0 ? $min_years : '' ?>">
                                     </div>
-                                    <div class="col-md-3 d-flex align-items-end row g-2">
+                                    <div class="col-lg-3 d-flex align-items-end row g-2">
                                         <div class="col-6">
                                             <button class="btn bg-color-primary text-light fw-medium w-100" type="submit">Apply</button>
                                         </div>
                                         <div class="col-6">
-                                            <button type="reset" class="btn btn-outline-secondary w-100 fw-medium">Reset</button>
+                                            <button type="?page=1" class="btn btn-outline-secondary w-100 fw-medium">Reset</button>
                                         </div>
                                             
                                     </div>
@@ -134,7 +136,7 @@
                                                 <td><span class="badge bg-secondary"><?= $row['Years_Of_Experience'] ?> yrs</span></td>
                                                 <td>
                                                     <div class="btn-group">
-                                                        <a href="/QTrace-Website/pages/admin/view_contractor.php?id=<?= $row['Contractor_Id'] ?>" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></a>
+                                                        <a href="/QTrace-Website/view-contractor?id=<?= $row['Contractor_Id'] ?>" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></a>
                                                         <button class="btn btn-sm btn-outline-danger" onclick="confirmDelete(<?= $row['Contractor_Id'] ?>)"><i class="bi bi-trash"></i></button>
                                                     </div>
                                                 </td>

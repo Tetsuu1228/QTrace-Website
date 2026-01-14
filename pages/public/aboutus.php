@@ -54,7 +54,7 @@
             border-radius: 50px;
         }
     </style>
-    <body>
+    <body class="bg-color-background">
         <?php
             include('../../components/topNavigation.php');
         ?>
@@ -69,7 +69,7 @@
                 </div>
             </section>
  
-            <section class="container text-center py-5 mt-4">
+            <section class="container-fluid  text-center py-5 mt-4">
                 <div class="container">
                     <div class="row g-4">
                         <div class="col-sm-6">
@@ -106,7 +106,7 @@
                 </div>
             </section>
  
-            <section class="container-fluid bg-color-background text-center py-5 my-5">
+            <section class="container-fluid bg-white text-center py-5 my-5">
                 <div class="title-section mb-4">
                     <h2 class="fw-medium">What is QTrace?</h2>
                     <p class="text-muted lead mb-5 w-75 m-auto">QTRACE (Quezon City Transparency, Accountability, and Citizen Engagement) is the official digital platform of the Quezon City Government
@@ -227,7 +227,7 @@
                 </div>
             </section>
 
-            <section class="container-fluid bg-color-background text-center py-5 my-5">
+            <section class="container-fluid bg-white text-center py-5 my-5">
                 <div class="title-section mb-4">
                     <h2 class="fw-medium">Quezon City Government</h2>
                     <p class="text-muted lead mb-5 w-75 m-auto">Leadership committed to transparency, accountability, and innovative governance</p>

@@ -1,5 +1,5 @@
 <?php 
-    $current_page = 'contractorList'; 
+    $page_name = 'contractorList'; 
     require('../../database/controllers/get_view_contractor.php'); 
     include('../../database/connection/security.php');
 ?>

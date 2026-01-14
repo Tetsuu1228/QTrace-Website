@@ -1,37 +1,130 @@
 <?php
-//Database connection
-require('../../database/connection/connection.php');
+// Database connection
+require('../connection/connection.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Capture form data
-    $contractor_id = (int)$_POST['Contractor_ID'];
-    $status_id = (int)$_POST['status_id'];
-    $project_title = $_POST['Project_Title'];
-    $project_description = $_POST['Project_Description'];
-    $project_budget = (float)$_POST['Project_Budget'];
-    $project_started_date = $_POST['Project_StartedDate'] ?? null;
-    $project_end_date = $_POST['Project_EndDate'] ?? null;
-    $location_id = (int)$_POST['location_ID'];
+    // 1. Capture Data from "Project Information" & "Location"
+    $contractor_id   = (int)$_POST['Contractor_ID'];
+    $project_status  = $conn->real_escape_string($_POST['Project_Status']);
+    $project_lng     = $conn->real_escape_string($_POST['lng']);
+    $project_lat     = $conn->real_escape_string($_POST['lat']);
 
-    // Prepare and Execute Query
-    $sql = "INSERT INTO projects_table (Contractor_ID, status_id, Project_Title, Project_Description, Project_Budget, Project_StartedDate, Project_EndDate, location_ID) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("iissdsi", $contractor_id, $status_id, $project_title, $project_description, $project_budget, $project_started_date, $project_end_date, $location_id);
+    // 2. Capture Data from "Budget & Timeline"
+    $project_title       = $conn->real_escape_string($_POST['Project_Title']);
+    $project_description = $conn->real_escape_string($_POST['Project_Description']);
+    $project_budget      = (float)$_POST['Project_Budget'];
+    $street              = $conn->real_escape_string($_POST['street']);
+    $barangay            = $conn->real_escape_string($_POST['barangay']);
+    $zip_code            = $conn->real_escape_string($_POST['zip_code']);
+    $started_date        = $_POST['Project_StartedDate'];
+    $end_date            = $_POST['Project_EndDate'];
+    $project_category     = $conn->real_escape_string($_POST['Project_Category']);
 
-    if ($stmt->execute()) {
-        echo json_encode([
-            "success" => true,
-            "message" => "Project added successfully",
-            "project_id" => $conn->insert_id
-        ]);
-    } else {
-        echo json_encode([
-            "success" => false,
-            "error" => "Failed to add project: " . $stmt->error
-        ]);
+    // Begin Transaction
+    $conn->begin_transaction();
+
+    try {
+        // --- STEP 1: Insert into projects_table ---
+        $sql1 = "INSERT INTO projects_table (
+                    Contractor_ID, 
+                    Project_Status, 
+                    Project_Lng, 
+                    Project_Lat,
+                    Project_Category
+                ) VALUES (?, ?, ?, ?, ?)";
+        
+        $stmt1 = $conn->prepare($sql1);
+        $stmt1->bind_param("issss", $contractor_id, $project_status, $project_lng, $project_lat, $project_category);
+        $stmt1->execute();
+        $project_id = $conn->insert_id;
+
+        // --- STEP 2: Insert into projectdetails_table ---
+        $sql2 = "INSERT INTO projectdetails_table (
+                    Project_ID, 
+                    ProjectDetails_Title, 
+                    ProjectDetails_Description, 
+                    ProjectDetails_Budget, 
+                    ProjectDetails_Street, 
+                    ProjectDetails_Barangay, 
+                    ProjectDetails_ZIP_Code, 
+                    ProjectDetails_StartedDate, 
+                    ProjectDetails_EndDate
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        
+        $stmt2 = $conn->prepare($sql2);
+        $stmt2->bind_param("issdsssss", 
+            $project_id, $project_title, $project_description, 
+            $project_budget, $street, $barangay, $zip_code, 
+            $started_date, $end_date
+        );
+        $stmt2->execute();
+
+        // --- STEP 3: Handle Legal Documents (projectsdocument_table) ---
+        if (!empty($_FILES['document_files']['name'][0])) {
+            $docDir = "/QTrace-Website/uploads/projects/documents/";
+            if (!is_dir($docDir)) mkdir($docDir, 0777, true);
+
+            $stmtDoc = $conn->prepare("INSERT INTO projectsdocument_table (
+                                        Project_ID, 
+                                        ProjectDocument_FileLocation, 
+                                        ProjectDocument_Type
+                                        ) VALUES (?, ?, ?)");
+
+            foreach ($_FILES['document_files']['name'] as $key => $val) {
+                if ($_FILES['document_files']['error'][$key] == 0) {
+                    $docName = $_POST['document_names'][$key];
+                    $tmpPath = $_FILES['document_files']['tmp_name'][$key];
+                    $ext     = pathinfo($val, PATHINFO_EXTENSION);
+                    
+                    // Generate unique filename to prevent overwriting
+                    $filename = "DOC_" . $project_id . "_" . time() . "_" . $key . "." . $ext;
+                    $filePath = $docDir . $filename;
+
+                    if (move_uploaded_file($tmpPath, $filePath)) {
+                        $stmtDoc->bind_param("iss", $project_id, $filePath, $docName);
+                        $stmtDoc->execute();
+                    }
+                }
+            }
+        }
+
+        // --- STEP 4: Handle Milestone Gallery (projectmilestone_table) ---
+        if (!empty($_FILES['img_files']['name'][0])) {
+            $imgDir = "/QTrace-Website/uploads/projects/milestones/";
+            if (!is_dir($imgDir)) mkdir($imgDir, 0777, true);
+
+            $stmtMilestone = $conn->prepare("INSERT INTO projectmilestone_table (
+                                                Project_ID, 
+                                                projectMilestone_Image_Path, 
+                                                projectMilestone_Phase
+                                                ) VALUES (?, ?, ?)");
+
+            foreach ($_FILES['img_files']['name'] as $key => $val) {
+                if ($_FILES['img_files']['error'][$key] == 0) {
+                    $phase   = $_POST['img_types'][$key];
+                    $tmpPath = $_FILES['img_files']['tmp_name'][$key];
+                    $ext     = pathinfo($val, PATHINFO_EXTENSION);
+                    
+                    $filename = "IMG_" . $project_id . "_" . time() . "_" . $key . "." . $ext;
+                    $filePath = $imgDir . $filename;
+
+                    if (move_uploaded_file($tmpPath, $filePath)) {
+                        $stmtMilestone->bind_param("iss", $project_id, $filePath, $phase);
+                        $stmtMilestone->execute();
+                    }
+                }
+            }
+        }
+
+        // Commit all changes if everything is successful
+        $conn->commit();
+        header("Location: /QTrace-Website/project-list?msg=added");
+        exit();
+
+    } catch (Exception $e) {
+        // Rollback transaction if any error occurs to prevent partial data
+        $conn->rollback();
+        die("Error processing request: " . $e->getMessage());
     }
-
-    $stmt->close();
 }
 ?>

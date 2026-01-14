@@ -1,23 +1,5 @@
 <?php
-// Start the session to handle the timeout logic
-session_start();
 
-// 1. Session Timeout Logic (5 Minutes)
-$timeout_duration = 300; // 300 seconds = 5 minutes
-
-if (isset($_SESSION['last_activity'])) {
-    $elapsed_time = time() - $_SESSION['last_activity'];
-    if ($elapsed_time > $timeout_duration) {
-        session_unset();
-        session_destroy();
-        header("Location: /QTrace-Website/login?timeout");
-        exit();
-    }
-}
-// Update last activity time on every request
-$_SESSION['last_activity'] = time();
-
-// 2. Database connection
 require('../connection/connection.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

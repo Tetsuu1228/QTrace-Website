@@ -1,5 +1,5 @@
 <?php 
-  $current_page = 'addAccount'; 
+  $page_name = 'addAccount'; 
   include('../../database/connection/security.php');
 ?>
 

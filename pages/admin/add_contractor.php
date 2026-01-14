@@ -1,5 +1,5 @@
 <?php 
-  $current_page = 'addContractor'; 
+  $page_name = 'addContractor'; 
   include('../../database/connection/security.php');
 ?>
 

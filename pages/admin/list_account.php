@@ -1,6 +1,5 @@
 <?php 
-    $current_page = 'accountList'; 
-    // This controller should now fetch from the 'users' table
+    $page_name = 'accountList'; 
     require('../../database/controllers/get_users.php');
     include('../../database/connection/security.php');
 ?>

@@ -1,9 +1,9 @@
 <?php 
-    $current_page = 'projects'; 
-    session_start();
+    $page_name = 'projectList'; 
     require('../../database/controllers/get_project_details.php');
-
-        // Placeholder for reports count - you can replace this with a real DB count
+    include('../../database/connection/security.php');
+    
+    // Placeholder for reports count - you can replace this with a real DB count
     $report_count = 1; 
 ?>
 
@@ -25,8 +25,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
     <!-- General Css Link -->
     <link rel="stylesheet" href="/QTrace-Website/assets/css/styles.css" />
-    <!-- Map Link -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <!-- Custome Css For This Page Only  -->
     <style>
         .main-card { border-radius: 12px; border: none; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
@@ -48,29 +46,42 @@
         .official-response { background-color: #eff6ff; border-left: 4px solid #3b82f6; border-radius: 4px; padding: 1rem; margin-top: 1rem; }
     </style>
 
-    <body class="bg-color-background">
+  </head>
+  <body>
+    <div class="app-container">
+        
         <?php
-            include('../../components/topNavigation.php');
+            // Header Include
+            include('../../components/header.php');
         ?>
-        <main>
-            
-        <section class="container py-5" >
-            <nav aria-label="breadcrumb">
-                <!-- Breadcrumb -->
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"> <a href="/QTrace-Website/home">Home</a> </li>
-                    <li class="breadcrumb-item"><a href="/QTrace-Website/projects">Project List</a></li>
-                    <li class="breadcrumb-item active">Project Details</li>
-                </ol>
-            </nav>
 
-            <div class="title-section mb-4">
-                <h2 class="fw-bold">Project Details</h2>
-                <p class="text-muted">Official details of a Quezon City government project.</p>
-            </div>
-            
-            <div class="container-fluid py-2">
-                        <div class="card main-card mb-4 ">
+        <div class="content-area">
+            <?php
+                // Sidebar Include
+                include('../../components/sideNavigation.php');
+            ?>
+
+            <main class="main-view">
+                <div class="container-fluid">
+                    <nav aria-label="breadcrumb">
+                        <!-- Breadcrumb -->
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"> <a href="/QTrace-Website/dashboard">Home</a> </li>
+                            <li class="breadcrumb-item"><a href="/QTrace-Website/project-list?id=<?= $project_id ?>">Project List</a></li>
+                            <li class="breadcrumb-item active">Project Details</li>
+                        </ol>
+                    </nav>
+
+                    <div class="row mb-2">
+                        <div class="col">
+                            <!-- Page Header -->
+                             <h2 class="fw-bold">Project Details</h2>
+                            <p>Official details of a Quezon City government project</p>
+                        </div>
+                    </div>
+                    
+                    <div class="container-fluid py-2">
+                        <div class="card main-card mb-4">
                             <div class="card-body py-5 px-4">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <div>
@@ -87,7 +98,7 @@
                                             <div class="icon-box me-3"><i class="bi bi-geo-alt-fill"></i></div>
                                             <div>
                                                 <small class="text-muted d-block small fw-bold">LOCATION</small>
-                                                <span class="fw-medium fs-8 text-dark"><?php echo htmlspecialchars($full_address); ?></span>
+                                                <span class="fw-medium fs-8  text-dark"><?php echo htmlspecialchars($full_address); ?></span>
                                             </div>
                                         </div>
                                     </div>
@@ -225,21 +236,20 @@
                             </div>
                         </div>
                     </div>
-        </section>
-    </main>
+                </div>
+            </main>
+        </div>
+    </div>
 
-        
-        <?php
-            include('../../components/footer.php');
-        ?>
+        <!-- Custome Script For This Page Only  --> 
+        <script>
 
-
-
+        </script>
+         
         <!-- Reusable Script -->
-        <script src="/QTrace-Website/assets/js/map.js"></script>
+        <script src="/QTrace-Website/assets/js/mouseMovement.js"></script>
 
         <!-- Bootstrap JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-        
-    </body>
+  </body>
 </html>

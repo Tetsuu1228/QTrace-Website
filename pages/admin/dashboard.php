@@ -1,5 +1,5 @@
 <?php 
-    $current_page = 'dashboard'; 
+    $page_name = 'dashboard'; 
     include('../../database/connection/security.php');    
 ?>
 
