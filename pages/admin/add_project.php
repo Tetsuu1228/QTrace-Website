@@ -170,6 +170,10 @@ if ($contractorStmt) {
                     <div class="row g-3 mb-4">
                     <legend>Location</legend>
                     <hr class="m-1" />
+                    
+                    <div class="col-md-12 mb-2">
+                      <div id="map-picker"></div>
+                    </div>
                     <div class="row mt-2">
                       <div class="col-md-4 mb-4">
                         <label for="street" class="form-label fw-medium color-black">Street</label>
@@ -186,9 +190,6 @@ if ($contractorStmt) {
                         <input type="number" class="form-control" id="zip_code" name="zip_code" placeholder="e.g., 12345" required />
                           <div class="invalid-feedback">Please enter the zip code.</div>
                       </div>
-                    </div>
-                    <div class="col-md-12 mb-2">
-                      <div id="map-picker"></div>
                     </div>
                     <div class="row">
                       <div class="col-md-6 mb-4">
@@ -310,28 +311,67 @@ if ($contractorStmt) {
 
     <!-- Custome Script For This Page Only  --> 
     <script>
-      // Initialize map
-      const map = L.map('map-picker').setView([14.6760, 121.0437], 13);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+      document.addEventListener("DOMContentLoaded", function() {
+        // Initialize map
+        const map = L.map('map-picker').setView([14.6760, 121.0437], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
 
-      let marker;
+        // Fix for gray map issue in hidden containers
+        setTimeout(() => { map.invalidateSize(); }, 500);
 
-      // Click Event Listener
-      map.on('click', function(e) {
-          const lat = e.latlng.lat.toFixed(6);
-          const lng = e.latlng.lng.toFixed(6);
+        let marker;
 
-          // Update Form Fields
-          document.getElementById('lat').value = lat;
-          document.getElementById('lng').value = lng;
+        async function updateAddressDetails(lat, lng) {
+            try {
+                document.getElementById('street').placeholder = "Fetching...";
+                document.getElementById('barangay').placeholder = "Fetching...";
 
-          // Move or Create Marker
-          if (marker) {
-              marker.setLatLng(e.latlng);
-          } else {
-              marker = L.marker(e.latlng).addTo(map);
-          }
-      });
+                // Use the absolute path from the web root
+                const response = await fetch(`/QTrace-Website/database/controllers/get_address.php?lat=${lat}&lng=${lng}`);
+                
+                if (!response.ok) throw new Error("Controller not found");
+                
+                const data = await response.json();
+
+                if (data && data.address) {
+                    const addr = data.address;
+                    document.getElementById('street').value = addr.road || addr.street || addr.pedestrian || "";
+                    document.getElementById('barangay').value = addr.neighbourhood || addr.village || addr.suburb || addr.quarter || addr.city_district || "";
+                    document.getElementById('zip_code').value = addr.postcode || "";
+                }
+            } catch (error) {
+                console.error("Geocoding error:", error);
+                document.getElementById('street').placeholder = "Error fetching address";
+            }
+        }
+
+        map.on('click', function(e) {
+            const lat = e.latlng.lat.toFixed(6);
+            const lng = e.latlng.lng.toFixed(6);
+
+            document.getElementById('lat').value = lat;
+            document.getElementById('lng').value = lng;
+
+            if (marker) { marker.setLatLng(e.latlng); } 
+            else { marker = L.marker(e.latlng).addTo(map); }
+
+            updateAddressDetails(lat, lng);
+        });
+
+        // Step Navigation Logic (Simplified)
+        document.querySelector('.next-btn').addEventListener('click', function() {
+            document.getElementById('p0').classList.remove('active');
+            document.getElementById('p1').classList.add('active');
+        });
+
+        document.querySelector('.prev-btn').addEventListener('click', function() {
+            document.getElementById('p1').classList.remove('active');
+            document.getElementById('p0').classList.add('active');
+            setTimeout(() => { map.invalidateSize(); }, 100);
+        });
+    });
     </script>
          
     <!-- Reusable Script -->
