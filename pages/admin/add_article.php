@@ -61,7 +61,7 @@
                                 <nav class="mt-2" aria-label="breadcrumb">
                                     <ol class="breadcrumb m-0">
                                         <li class="breadcrumb-item"><a href="/QTrace-Website/dashboard">Admin</a></li>
-                                        <li class="breadcrumb-item"><a href="/QTrace-Website/project-articles">Articles</a></li>
+                                        <li class="breadcrumb-item"><a href="/QTrace-Website/list-article">Articles</a></li>
                                         <li class="breadcrumb-item active" aria-current="page">Add Article</li>
                                     </ol>
                                 </nav>
@@ -137,7 +137,7 @@
                                         </div>
                                     </div>
                                     <div class="col-12 d-flex gap-2 justify-content-end">
-                                        <a class="btn btn-outline-secondary btn-sm" href="/QTrace-Website/project-articles">Cancel</a>
+                                        <a class="btn btn-outline-secondary btn-sm" href="/QTrace-Website/list-article">Cancel</a>
                                         <button type="submit" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg me-1"></i> Save</button>
                                     </div>
                                 </form>

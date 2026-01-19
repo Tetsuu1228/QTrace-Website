@@ -123,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $auditService->log($userId, 'CREATE', 'Article', $article_id, null, $newArticleVals);
         
         $_SESSION['success_message'] = 'Article added successfully!';
-        header('Location: /QTrace-Website/article-list?status=succes');
+        header('Location: /QTrace-Website/list-article?status=succes');
         exit();
     } else {
         $_SESSION['error'] = 'Error adding article. Please try again.';

@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Comprehensive validation
     if ($article_id <= 0) {
         $_SESSION['error'] = 'Invalid article ID.';
-        header('Location: /QTrace-Website/project-articles');
+        header('Location: /QTrace-Website/list-article');
         exit();
     }
 
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $article_check = $conn->query("SELECT article_photo_url, article_type, article_description, article_status FROM articles_table WHERE article_ID = $article_id");
     if (!$article_check || $article_check->num_rows === 0) {
         $_SESSION['error'] = 'Article not found.';
-        header('Location: /QTrace-Website/project-articles');
+        header('Location: /QTrace-Website/list-article');
         exit();
     }
     
@@ -147,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $auditService->log($userId, 'UPDATE', 'Article', $article_id, $oldArticleVals, $newArticleVals);
         
         $_SESSION['success_message'] = 'Article updated successfully!';
-        header('Location: /QTrace-Website/project-articles');
+        header('Location: /QTrace-Website/list-article');
         exit();
     } else {
         $_SESSION['error'] = 'Error updating article: ' . $conn->error;
@@ -156,7 +156,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 } else {
-    header('Location: /QTrace-Website/project-articles');
+    header('Location: /QTrace-Website/list-article');
     exit();
 }
 ?>

@@ -52,7 +52,7 @@ $article_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
 if ($article_id <= 0) {
     $_SESSION['error'] = 'Invalid article ID.';
-    header('Location: /QTrace-Website/project-articles');
+    header('Location: /QTrace-Website/list-article');
     exit();
 }
 
@@ -66,7 +66,7 @@ if (!isset($_SESSION['user_ID'])) {
 $article_check = $conn->query("SELECT article_ID FROM articles_table WHERE article_ID = $article_id");
 if (!$article_check || $article_check->num_rows === 0) {
     $_SESSION['error'] = 'Article not found.';
-    header('Location: /QTrace-Website/project-articles');
+    header('Location: /QTrace-Website/list-article');
     exit();
 }
 
@@ -84,12 +84,12 @@ if ($conn->query($update_sql) === TRUE) {
     $auditService->log($userId, 'UPDATE', 'Article', $article_id, $oldVals, $newVals);
     
     $_SESSION['success_message'] = 'Article moved to Draft successfully!';
-    header('Location: /QTrace-Website/project-articles');
+    header('Location: /QTrace-Website/list-article');
     exit();
 } else {
     $_SESSION['error'] = 'Error updating article: ' . $conn->error;
     error_log('Database error: ' . $conn->error);
-    header('Location: /QTrace-Website/project-articles');
+    header('Location: /QTrace-Website/list-article');
     exit();
 }
 ?>

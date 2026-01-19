@@ -44,7 +44,7 @@
                         <nav class="mb-3" aria-label="breadcrumb">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="/QTrace-Website/dashboard">Admin</a></li>
-                                <li class="breadcrumb-item"><a href="/QTrace-Website/project-articles">Articles</a></li>
+                                <li class="breadcrumb-item"><a href="/QTrace-Website/list-article">Articles</a></li>
                                 <li class="breadcrumb-item active" aria-current="page"><?= htmlspecialchars($article['ProjectDetails_Title']) ?></li>
                             </ol>
                         </nav>
@@ -117,7 +117,7 @@
 
                         <!-- Navigation & Actions -->
                         <div class="d-flex gap-2 mt-4 justify-content-between">
-                            <a href="/QTrace-Website/project-articles" class="btn btn-outline-secondary">
+                            <a href="/QTrace-Website/list-article" class="btn btn-outline-secondary">
                                 <i class="bi bi-arrow-left me-1"></i> Back to Articles
                             </a>
                             <div class="d-flex gap-2">
@@ -153,7 +153,7 @@
                 .then(data => {
                     if (data.success) {
                         alert('Article archived successfully!');
-                        window.location.href = '/QTrace-Website/project-articles';
+                        window.location.href = '/QTrace-Website/list-article';
                     } else {
                         alert('Failed to archive article: ' + (data.message || 'Unknown error'));
                     }
