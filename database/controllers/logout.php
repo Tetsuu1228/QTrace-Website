@@ -2,6 +2,12 @@
 // 1. Initialize the session
 session_start();
 
+if($_SESSION['role'] != 'admin'){
+    $location = "/QTrace-Website/home";
+}else{
+    $location = "/QTrace-Website/login";
+}
+
 // 2. Unset all session variables
 $_SESSION = array();
 
@@ -19,6 +25,6 @@ if (ini_get("session.use_cookies")) {
 session_destroy();
 
 // 5. Redirect to the login page
-header("Location: /QTrace-Website/login");
+header("Location: " . $location);
 exit();
 ?>

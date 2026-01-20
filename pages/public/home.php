@@ -1,4 +1,5 @@
 <?php 
+    session_start();
     $current_page = 'home'; 
     require('../../database/controllers/get_data.php');
 ?>

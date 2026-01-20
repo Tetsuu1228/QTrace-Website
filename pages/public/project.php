@@ -95,8 +95,8 @@
 
                 <div class="card border-0 shadow-sm mb-3 p-4">
                     <form method="GET" class="row g-3 align-items-end">
-                        <div class="col-md-4">
-                            <label class="form-label fw-bold small text-muted">SEARCH PROJECT</label>
+                        <div class="col-md-3">
+                            <label class="form-label fw-600 text-muted">Search Project</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
                                 <input type="text" name="search" class="form-control" placeholder="e.g, Metro Build or Drainage..." value="<?= htmlspecialchars($search) ?>">
@@ -104,7 +104,7 @@
                         </div>
                             
                         <div class="col-md-3">
-                            <label class="form-label fw-bold small text-muted">STATUS</label>
+                            <label class="form-label fw-600 text-muted">Project Status</label>
                             <select name="status" class="form-select">
                                 <option value="">All Status</option>
                                 <option value="Ongoing" <?= $status == 'Ongoing' ? 'selected' : '' ?>>Ongoing</option>
@@ -113,7 +113,7 @@
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <label class="form-label fw-bold small text-muted">CATEGORY</label>
+                            <label class="form-label fw-600 text-muted">Project Category</label>
                             <select name="category" class="form-select">
                                 <option value="">All Categories</option>
                                 <option value="Infrastructure" <?= $category == 'Infrastructure' ? 'selected' : '' ?>>Infrastructure</option>
@@ -122,8 +122,13 @@
                                 <option value="Safety" <?= $category == 'Safety' ? 'selected' : '' ?>>Safety</option>
                             </select>
                         </div>
-                        <div class="col-md-2">
-                            <button type="submit" class="btn bg-color-primary text-light w-100 fw-bold">Filter</button>
+                        <div class="col-lg-3 d-flex align-items-end gap-2">
+                            <button class="btn text-light flex-grow-1 bg-color-primary" type="submit">
+                                <i class="bi bi-funnel me-2"></i>Apply Filters
+                            </button>
+                            <a href="?" class="btn btn-secondary flex-grow-1">
+                                <i class="bi bi-arrow-clockwise me-2"></i>Reset
+                            </a>
                         </div>
                     </form>
                 </div>

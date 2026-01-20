@@ -89,7 +89,7 @@
                 <div class="card border-0 shadow-sm mb-3 p-4">
                     <form method="GET" class="row g-3 align-items-end">
                         <div class="col-md-6">
-                            <label class="form-label fw-bold small text-muted">SEARCH CONTRACTOR</label>
+                            <label class="form-label fw-600 text-muted">Search Contractor</label>
                             <div class="input-group">
                                 <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
                                 <input type="text" name="search" class="form-control border-start-0" placeholder="e.g. Metro Build or Drainage..." value="<?= htmlspecialchars($search) ?>">
@@ -97,16 +97,16 @@
                         </div>
 
                         <div class="col-md-3">
-                            <label class="form-label fw-bold small text-muted">MIN. EXPERIENCE</label>
-                            <select name="min_years" class="form-select">
-                                <option value="0">Any Experience</option>
-                                <option value="5" <?= $min_years == 5 ? 'selected' : '' ?>>5+ Years</option>
-                                <option value="10" <?= $min_years == 10 ? 'selected' : '' ?>>10+ Years</option>
-                                <option value="20" <?= $min_years == 20 ? 'selected' : '' ?>>20+ Years</option>
-                            </select>
+                            <label class="form-label fw-600 text-muted">Min. Experience</label>
+                            <input type="text" name="min_years" class="form-control border-start-0" min="0"  value="<?= htmlspecialchars($min_years) ?>">
                         </div>
-                        <div class="col-md-3 ">
-                            <button type="submit" class="btn bg-color-primary text-light w-100 fw-bold">Filter</button>
+                        <div class="col-md-3 d-flex align-items-end gap-2">
+                            <button class="btn text-light flex-grow-1 bg-color-primary" type="submit">
+                                <i class="bi bi-funnel me-2"></i>Apply Filters
+                            </button>
+                            <a href="?" class="btn btn-secondary flex-grow-1">
+                                <i class="bi bi-arrow-clockwise me-2"></i>Reset
+                            </a>
                         </div>
                     </form>
                 </div>

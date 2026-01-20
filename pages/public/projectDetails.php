@@ -2,9 +2,7 @@
     $current_page = 'projects'; 
     session_start();
     require('../../database/controllers/get_project_details.php');
-
-        // Placeholder for reports count - you can replace this with a real DB count
-    $report_count = 1; 
+    require('../../database/controllers/get_client_report.php');
 ?>
 
 <!DOCTYPE html>
@@ -79,87 +77,6 @@
             border-top: 1px solid var(--surface); 
         }
         
-        /* Chat Interface Styling */
-        #reportChatContainer { 
-            position: fixed; 
-            top: 0; 
-            right: 0; 
-            width: 450px; 
-            height: 100vh; 
-            background: white; 
-            box-shadow: -4px 0 20px rgba(0,0,0,0.15); 
-            z-index: 1050; 
-            display: none;
-            flex-direction: column;
-        }
-        .chat-header { 
-            padding: 1.5rem; 
-            border-bottom: 1px solid var(--surface); 
-            background: var(--primary);
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .chat-messages { 
-            flex: 1; 
-            overflow-y: auto; 
-            padding: 1.5rem; 
-            background: var(--background); 
-        }
-        .message { 
-            margin-bottom: 1.5rem; 
-            padding: 1rem; 
-            border-radius: 10px; 
-            background: white;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-        .message-header { 
-            display: flex; 
-            align-items: center; 
-            margin-bottom: 0.5rem; 
-            gap: 0.5rem;
-        }
-        .message-content { 
-            color: var(--text-dark); 
-            line-height: 1.6; 
-        }
-        .original-report { 
-            border-left: 4px solid var(--primary); 
-            background: rgba(26, 54, 93, 0.05);
-        }
-        .admin-message { 
-            border-left: 4px solid var(--secondary); 
-        }
-        .user-message { 
-            border-left: 4px solid var(--accent); 
-        }
-        .system-message { 
-            background: rgba(246, 173, 85, 0.15); 
-            border: 1px solid var(--accent); 
-            text-align: center;
-            padding: 0.5rem;
-            font-style: italic;
-        }
-        .chat-input { 
-            padding: 1.5rem; 
-            border-top: 1px solid var(--surface); 
-            background: white;
-        }
-        .chat-input textarea { 
-            width: 100%; 
-            border: 1px solid var(--surface); 
-            border-radius: 8px; 
-            padding: 0.75rem; 
-            resize: none; 
-            font-size: 0.95rem;
-            margin-bottom: 0.75rem;
-        }
-        .chat-input textarea:focus { 
-            outline: none; 
-            border-color: var(--primary); 
-            box-shadow: 0 0 0 3px rgba(26, 54, 93, 0.1);
-        }
     </style>
 
     <body class="bg-color-background">
@@ -242,7 +159,7 @@
                                     <li class="nav-item "><button class="nav-link text-black-50 fw-medium  active" data-bs-toggle="tab" data-bs-target="#overview"><i class="bi bi-file-text me-2"></i>Overview</button></li>
                                     <li class="nav-item "><button class="nav-link text-black-50 fw-medium " data-bs-toggle="tab" data-bs-target="#docs"><i class="bi bi-folder2-open me-2"></i>Documents (<?php echo count($documents); ?>)</button></li>
                                     <li class="nav-item "><button class="nav-link text-black-50 fw-medium " data-bs-toggle="tab" data-bs-target="#gallery"><i class="bi bi-images me-2"></i>Photo Gallery (<?php echo count($milestones); ?>)</button></li>
-                                    <li class="nav-item "><button class="nav-link text-black-50 fw-medium " data-bs-toggle="tab" data-bs-target="#reports"><i class="bi bi-chat-left-dots me-2"></i>Reports (<?php echo $report_count; ?>)</button></li>
+                                    <li class="nav-item "><button class="nav-link text-black-50 fw-medium " data-bs-toggle="tab" data-bs-target="#reports"><i class="bi bi-chat-left-dots me-2"></i>Reports (<?php echo count($reports); ?>)</button></li>
                                 </ul>
                             </div>
                             <div class="card-body p-4 tab-content">
@@ -321,51 +238,93 @@
                                     <div class="d-flex justify-content-between align-items-center mb-4">
                                         <p class="text-muted mb-0">Report issues and communicate with project administrators</p>
                                         <?php if(isset($_SESSION['user_ID'])): ?>
-                                        <button class="btn bg-color-primary text-white" id="newReportBtn">
+                                        <button class="btn bg-color-primary text-white" data-bs-toggle="modal" data-bs-target="#newReportModal">
                                             <i class="bi bi-plus-circle me-2"></i>New Report
                                         </button>
                                         <?php endif; ?>
                                     </div>
-                                    
-                                    <div id="reportsList">
-                                        <div class="text-center py-5">
-                                            <div class="spinner-border text-primary" role="status">
-                                                <span class="visually-hidden">Loading...</span>
-                                            </div>
-                                            <p class="mt-3 text-muted">Loading reports...</p>
+
+                                    <?php if (empty($reports)): ?>
+                                        <div class="text-center py-5 text-muted">
+                                            <i class="bi bi-inbox" style="font-size: 3rem;"></i>
+                                            <p class="mt-3">No reports yet for this project</p>
+                                            <p class="small">Be the first to report an issue</p>
                                         </div>
-                                    </div>
+                                    <?php else: ?>
+                                        <div class="list-group list-group-flush">
+                                            <?php foreach ($reports as $report): 
+                                                $statusClass = [
+                                                    'open' => 'warning',
+                                                    'in progress' => 'info',
+                                                    'resolved' => 'success'
+                                                ][$report['report_status']] ?? 'secondary';
+                                                $reportID = (int) $report['report_ID'];
+                                                $adminComments = $adminCommentsByReport[$reportID] ?? [];
+                                            ?>
+                                            <div class="list-group-item report-card mb-3 shadow-sm">
+                                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                                    <div>
+                                                        <h6 class="fw-bold mb-1"><?php echo htmlspecialchars($report['report_type']); ?></h6>
+                                                        <small class="text-muted">
+                                                            <i class="bi bi-person-circle me-1"></i><?php echo htmlspecialchars($report['username']); ?>
+                                                            <span class="mx-2">•</span>
+                                                            <i class="bi bi-clock me-1"></i><?php echo formatTimeAgo($report['last_activity']); ?>
+                                                        </small>
+                                                    </div>
+                                                    <span class="badge bg-<?php echo $statusClass; ?>-subtle text-<?php echo $statusClass; ?> rounded-pill px-3">
+                                                        <?php echo htmlspecialchars($report['report_status']); ?>
+                                                    </span>
+                                                </div>
+
+                                                <p class="text-secondary mb-3"><?php echo nl2br(htmlspecialchars($report['report_description'])); ?></p>
+
+                                                <?php if (!empty($report['report_evidencesPhoto_URL'])): ?>
+                                                    <div class="mb-3">
+                                                        <a href="<?php echo htmlspecialchars($report['report_evidencesPhoto_URL']); ?>" target="_blank" class="text-decoration-none">
+                                                            <i class="bi bi-paperclip me-2"></i>View Attachment
+                                                        </a>
+                                                    </div>
+                                                <?php endif; ?>
+
+                                                <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                                                    <span class="text-muted small">
+                                                        <i class="bi bi-chat-dots me-1"></i><?php echo count($adminComments); ?> <?php echo count($adminComments) === 1 ? 'admin comment' : 'admin comments'; ?>
+                                                    </span>
+                                                    <button class="btn btn-link p-0 fw-semibold text-decoration-none" data-bs-toggle="collapse" data-bs-target="#adminComments-<?php echo $reportID; ?>" aria-expanded="false" aria-controls="adminComments-<?php echo $reportID; ?>">
+                                                        View admin comment <i class="bi bi-arrow-down-short"></i>
+                                                    </button>
+                                                </div>
+
+                                                <div class="collapse mt-3" id="adminComments-<?php echo $reportID; ?>">
+                                                    <?php if (empty($adminComments)): ?>
+                                                        <div class="text-muted small">No admin comments yet.</div>
+                                                    <?php else: ?>
+                                                        <?php foreach ($adminComments as $comment): ?>
+                                                            <div class="p-3 border rounded mb-2 bg-light">
+                                                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                                                    <span class="fw-semibold text-dark"><?php echo htmlspecialchars($comment['author']); ?></span>
+                                                                    <small class="text-muted"><?php echo formatTimeAgo($comment['created_at']); ?></small>
+                                                                </div>
+                                                                <div class="text-secondary small mb-1"><?php echo nl2br(htmlspecialchars($comment['message'])); ?></div>
+                                                                <?php if (!empty($comment['attachment'])): ?>
+                                                                    <a href="<?php echo htmlspecialchars($comment['attachment']); ?>" target="_blank" class="small text-decoration-none">
+                                                                        <i class="bi bi-paperclip me-1"></i>View attachment
+                                                                    </a>
+                                                                <?php endif; ?>
+                                                            </div>
+                                                        <?php endforeach; ?>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
                     </div>
         </section>
     </main>
-
-    <!-- Chat Interface (Sliding Panel) -->
-    <div id="reportChatContainer">
-        <div class="chat-header">
-            <div>
-                <h5 class="mb-0" id="chatTitle"></h5>
-                <span id="chatStatus" class="badge"></span>
-                <span id="statusControls"></span>
-            </div>
-            <button class="btn btn-link text-white p-0" id="closeChatBtn" style="font-size: 1.5rem;">
-                <i class="bi bi-x-lg"></i>
-            </button>
-        </div>
-        
-        <div class="chat-messages" id="chatMessages">
-            <!-- Messages will be loaded here -->
-        </div>
-        
-        <div class="chat-input">
-            <textarea id="messageInput" rows="3" placeholder="Type your message... (Shift+Enter for new line)"></textarea>
-            <button class="btn bg-color-primary text-white w-100" id="sendMessageBtn">
-                <i class="bi bi-send me-2"></i>Send Message
-            </button>
-        </div>
-    </div>
 
     <!-- New Report Modal -->
     <div class="modal fade" id="newReportModal" tabindex="-1">
@@ -427,19 +386,69 @@
 
         <!-- Reusable Script -->
         <script src="/QTrace-Website/assets/js/map.js"></script>
-        <script src="/QTrace-Website/assets/js/reportChat.js"></script>
 
         <!-- Bootstrap JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
         
-        <!-- Initialize Report System -->
+        <!-- Handle report submission & UI -->
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                <?php if(isset($project['Project_ID'])): ?>
-                const projectID = <?php echo $project['Project_ID']; ?>;
-                const userRole = '<?php echo $_SESSION['user_Role'] ?? 'guest'; ?>';
-                initReportSystem(projectID, userRole);
-                <?php endif; ?>
+                const submitBtn = document.getElementById('submitReportBtn');
+                const reportForm = document.getElementById('newReportForm');
+
+                if (submitBtn && reportForm) {
+                    submitBtn.addEventListener('click', function() {
+                        const reportType = document.getElementById('reportType').value.trim();
+                        const description = document.getElementById('reportDescription').value.trim();
+                        const evidenceFile = document.getElementById('reportEvidence').files[0];
+
+                        if (!reportType) {
+                            alert('Please select a report type');
+                            return;
+                        }
+
+                        if (!description) {
+                            alert('Please provide a description');
+                            return;
+                        }
+
+                        const formData = new FormData();
+                        formData.append('project_id', <?php echo isset($project['Project_ID']) ? (int) $project['Project_ID'] : 0; ?>);
+                        formData.append('report_type', reportType);
+                        formData.append('description', description);
+
+                        if (evidenceFile) {
+                            formData.append('evidence', evidenceFile);
+                        }
+
+                        submitBtn.disabled = true;
+                        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Submitting...';
+
+                        fetch('/QTrace-Website/database/controllers/add_report.php', {
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                const modal = bootstrap.Modal.getInstance(document.getElementById('newReportModal'));
+                                modal?.hide();
+                                reportForm.reset();
+                                window.location.reload();
+                            } else {
+                                alert('Failed to submit report: ' + data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error submitting report:', error);
+                            alert('Error submitting report. Please try again.');
+                        })
+                        .finally(() => {
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = '<i class="bi bi-send me-2"></i>Submit Report';
+                        });
+                    });
+                }
             });
         </script>
     </body>

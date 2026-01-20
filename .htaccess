@@ -54,6 +54,7 @@ RewriteRule ^map$ pages/public/map.php [NC,L]
 
 RewriteRule ^projects$ pages/public/project.php [NC,L]
 RewriteRule ^project-details$ pages/public/projectDetails.php [NC,L]
+RewriteRule ^projects-audit$ pages/public/projectsAudit.php [NC,L]
 RewriteRule ^articles$ pages/public/articles.php [NC,L]
 RewriteRule ^article$ pages/public/view_article.php [NC,L]
 

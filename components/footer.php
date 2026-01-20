@@ -1,17 +1,19 @@
 <footer class="bg-color-primary text-light py-4 mt-5">
     <div class="container-fluid d-flex flex-column align-items-center">
-        <div class="row g-4">
+        <div class="row g-4 ms-5">
             <div class="col-md-4">
                 <div class=" p-4">
-                    <div class="align-items-center mb-2">
-
-                        <a class="navbar-brand lh-1" href="#">
-                            <span class="fs-5 m-0 p-0">QTrace</span>
-                            <br>
-                            <span class="fs-8 fw-normal">Quezon City Transparency</span>
+                    <div class="align-items-center mb-3">
+                        <a class="navbar-brand d-flex align-items-center" style="line-height: 0.8;" href="#">
+                            <img src="/QTrace-Website/assets/image/QTraceLogo.png" alt="QTrace Logo" srcset="" style="width: 31px;" class="me-2">
+                            <div>
+                                <span class="fs-5 lh-0">QTrace</span>
+                                <br>
+                                <span class=" fw-normal" style="font-size: 0.75rem;">Quezon City Transparency</span>
+                            </div>
                         </a>
                     </div>
-                    <p>
+                    <p class="me-5 pe-5">
                         QTRACE is Quezon City's official platform for monitoring government projects, ensuring transparency, and empowering citizens to participate in governance.
                     </p>
                 </div>

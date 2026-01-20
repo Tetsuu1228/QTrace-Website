@@ -9,10 +9,10 @@
         <!-- Tell the browser to be responsive to screen width -->
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <!-- SEO -->
-        <meta name="description" content="Admin login page for the QTRACE system."/>
+        <meta name="description" content="Login page for the QTRACE system."/>
         <meta name="author" content="Confractus" />
         <link rel="icon" type="image/png" sizes="16x16" href="" />
-        <title>QTrace - Admin Login</title>
+        <title>QTrace - Login</title>
         <!-- Bootstrap CSS Link-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Basta need toh-->
@@ -33,7 +33,7 @@
             <div class="row g-0 shadow rounded-4 overflow-hidden bg-white mx-auto" style="max-width: 1000px;">
                 
                 <div class="col-lg-5 bg-color-primary text-white p-5 d-flex flex-column justify-content-center">
-                    <div class="bg-warning text-color rounded-circle d-flex align-items-center justify-content-center mb-4 fw-bold" style="width: 60px; height: 60px;">QC</div>
+                    <img src="/QTrace-Website/assets/image/QTraceLogo.png" alt="QTrace Logo" srcset="" style="width: 60px;">
                     <h1 class="h2 fw-bold mb-3">Welcome to QTRACE</h1>
                     <p class="mb-5 opacity-75">Sign in to access your personalized dashboard and track projects.</p>
                     
@@ -44,7 +44,7 @@
                 </div>
 
                 <div class="col-lg-7 p-5">
-                    <h3 class="fw-bold mb-4 text-color">Admin Login</h3>
+                    <h3 class="fw-bold mb-4 text-color">Login</h3>
 
                     <?php 
                         if (isset($_SESSION['error'])) {

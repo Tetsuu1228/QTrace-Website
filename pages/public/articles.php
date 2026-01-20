@@ -311,7 +311,7 @@
         <main>
             <section class="hero-section">
                 <div class="container text-center">
-                    <span class="badge badge-qc mb-3 fw-normal py-2 px-3 fs-6"> Articles</span>
+                    <span class="badge badge-qc mb-3 fw-normal py-2 px-3 fs-6"> Articles & News</span>
                     <h1 class="display-5 fw-medium">Project Articles</h1>
                     <p class="lead mb-5 fw-normal fs-5 w-75 m-auto">
                         Stay informed with the latest updates and stories from our community projects.

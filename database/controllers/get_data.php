@@ -2,7 +2,7 @@
 require('../../database/connection/connection.php');
 
 // Get Count of Active Projects
-$sql_active = "SELECT COUNT(*) as total FROM projects_table WHERE Project_Status = 'Planned' || Project_Status = 'Ongoing' || Project_Status = 'Delayed'";
+$sql_active = "SELECT COUNT(*) as total FROM projects_table WHERE Project_Status = 'Planning' || Project_Status = 'Ongoing' || Project_Status = 'Delayed'";
 $result_active = $conn->query($sql_active);
 $row_active = $result_active->fetch_assoc();
 $active_count = $row_active['total'];

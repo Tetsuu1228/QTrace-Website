@@ -36,6 +36,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     // Store session data
                     $_SESSION['user_ID'] = $account['user_ID'];
                     $_SESSION['role'] = $account['user_Role'];
+                    $_SESSION['FirstName'] = $account['user_firstName'];
+                    $_SESSION['LastName'] = $account['user_lastName'];
                     
                     // Initialize the 5-minute timer
                     $_SESSION['last_activity'] = time();
@@ -46,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         header("Location: /QTrace-Website/dashboard");
                         exit();
                     }else{
-                        header("Location: /QTrace-Website/home?role={$_SESSION['role']}");
+                        header("Location: /QTrace-Website/home?role={$_SESSION['user_ID']}");
                         exit();
                     }
                 } else {

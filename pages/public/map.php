@@ -117,7 +117,7 @@
                                     <div class="col-12 mb-2">
                                         <select id="statusFilter" class="form-select form-select-sm shadow-none">
                                             <option value="all">All Statuses</option>
-                                            <option value="Planned">Planned</option>
+                                            <option value="Planning">Planning</option>
                                             <option value="Ongoing">Ongoing</option>
                                             <option value="Delayed">Delayed</option>
                                             <option value="Completed">Completed</option>
@@ -152,7 +152,7 @@
                     <div id="map" class="shadow-sm"></div>
                     <div class="map-legend">
                         <h6 class="fw-bold small border-bottom pb-2 mb-2">Status Key</h6>
-                        <div class="legend-item"><span class="dot bg-primary"></span> Planned</div>
+                        <div class="legend-item"><span class="dot bg-primary"></span> Planning</div>
                         <div class="legend-item"><span class="dot bg-success"></span> Ongoing</div>
                         <div class="legend-item"><span class="dot bg-danger"></span> Delayed</div>
                         <div class="legend-item"><span class="dot bg-secondary"></span> Completed</div>
